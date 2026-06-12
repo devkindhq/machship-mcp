@@ -43,30 +43,36 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 
 **Total: ~65 tools**
 
-## Getting Started
+## Quick Start (No Install Required)
 
-### Requirements
+> No cloning, no global installs — just Node.js 18+ and a Machship API token.
 
-- Node.js 18 or newer (for npx / local usage)
-- A Machship account with API access
-- VS Code, Cursor, Windsurf, Claude Desktop, or any other MCP client
-
-### Get Your Machship API Token
+**Step 1 — Get your Machship API token**
 
 1. Log into your Machship account
 2. Go to **Settings → API**
 3. Generate a Bearer token — this is your `MACHSHIP_API_TOKEN`
 
-### Standard Config
+**Step 2 — Add to your MCP client** (pick one below)
 
-Works in most MCP clients:
+**Step 3 — Restart your client and start chatting**
+
+> To verify it works, ask: _"Ping the Machship API"_ — you should get a successful response.
+
+---
+
+## Client Setup
+
+### Claude Desktop
+
+Edit `~/.claude/claude_desktop_config.json` (create it if it doesn't exist):
 
 ```json
 {
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["machship-mcp"],
+      "args": ["-y", "machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -75,17 +81,30 @@ Works in most MCP clients:
 }
 ```
 
-<details>
-<summary>Claude Desktop</summary>
+Restart Claude Desktop — the Machship tools will appear automatically.
 
-Add to your `~/.claude/claude_desktop_config.json`:
+### Claude Code (CLI)
+
+Run once to add to your project MCP config:
+
+```bash
+claude mcp add machship -- npx -y machship-mcp
+```
+
+Then set the token in your environment or `.env`:
+
+```bash
+export MACHSHIP_API_TOKEN=your-token-here
+```
+
+Or add it directly to `.mcp.json` after running the command above:
 
 ```json
 {
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["machship-mcp"],
+      "args": ["-y", "machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -93,29 +112,47 @@ Add to your `~/.claude/claude_desktop_config.json`:
   }
 }
 ```
-
-</details>
 
 <details>
 <summary>Cursor</summary>
 
-#### Click the button to install:
+#### One-click install:
 
-[<img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor">](https://cursor.com/en/install-mcp?name=Machship%20MCP&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJtYWNoc2hpcC1tY3AiXSwiZW52Ijp7Ik1BQ0hTSElQX0FQSV9UT0tFTiI6InlvdXItdG9rZW4taGVyZSJ9fQ==)
+[<img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor">](https://cursor.com/en/install-mcp?name=Machship%20MCP&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1hY2hzaGlwLW1jcCJdLCJlbnYiOnsiTUFDSFNISVBfQVBJX1RPS0VOIjoieW91ci10b2tlbi1oZXJlIn19)
 
-#### Or install manually:
+#### Manual setup:
 
-Go to `Cursor Settings` → `MCP` → `Add new MCP Server`. Name it "Machship MCP", use `command` type with the command `npx machship-mcp`. Add `MACHSHIP_API_TOKEN` in the environment variables section.
+Go to `Cursor Settings` → `MCP` → `Add new MCP Server`:
+- **Name:** Machship MCP
+- **Type:** command
+- **Command:** `npx -y machship-mcp`
+- **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
 
 </details>
 
 <details>
 <summary>VS Code</summary>
 
-Follow the MCP install [guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server), or install via the VS Code CLI:
+Install via the VS Code CLI (one command):
 
 ```bash
-code --add-mcp '{"name":"machship","command":"npx","args":["machship-mcp"],"env":{"MACHSHIP_API_TOKEN":"your-token-here"}}'
+code --add-mcp '{"name":"machship","command":"npx","args":["-y","machship-mcp"],"env":{"MACHSHIP_API_TOKEN":"your-token-here"}}'
+```
+
+Or follow the MCP [setup guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) and use this config:
+
+```json
+{
+  "mcpServers": {
+    "machship": {
+      "command": "npx",
+      "args": ["-y", "machship-mcp"],
+      "env": {
+        "MACHSHIP_API_TOKEN": "your-token-here"
+      }
+    }
+  }
+}
 ```
 
 </details>
@@ -123,14 +160,14 @@ code --add-mcp '{"name":"machship","command":"npx","args":["machship-mcp"],"env"
 <details>
 <summary>Windsurf</summary>
 
-Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/cascade/mcp). Add to your MCP configuration:
+Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/cascade/mcp) and add to your MCP configuration file:
 
 ```json
 {
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["machship-mcp"],
+      "args": ["-y", "machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -144,25 +181,67 @@ Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/casca
 <details>
 <summary>Goose</summary>
 
-Go to `Advanced settings` → `Extensions` → `Add custom extension`. Name it "Machship MCP", use type `STDIO`, set the command to `npx machship-mcp`, and add `MACHSHIP_API_TOKEN` as an environment variable.
+Go to `Advanced settings` → `Extensions` → `Add custom extension`:
+- **Name:** Machship MCP
+- **Type:** STDIO
+- **Command:** `npx -y machship-mcp`
+- **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
 
 </details>
 
 <details>
 <summary>LM Studio</summary>
 
-Go to `Program` in the right sidebar → `Install` → `Edit mcp.json`. Use the standard config above with your Machship API token.
+Go to `Program` in the right sidebar → `Install` → `Edit mcp.json` and add:
+
+```json
+{
+  "mcpServers": {
+    "machship": {
+      "command": "npx",
+      "args": ["-y", "machship-mcp"],
+      "env": {
+        "MACHSHIP_API_TOKEN": "your-token-here"
+      }
+    }
+  }
+}
+```
 
 </details>
 
 <details>
 <summary>Warp</summary>
 
-Go to `Settings` → `AI` → `Manage MCP Servers` → `+ Add`. Use the standard config above.
+Go to `Settings` → `AI` → `Manage MCP Servers` → `+ Add`, or use the slash command `/add-mcp` in the Warp prompt:
 
-Alternatively, use the slash command `/add-mcp` in the Warp prompt and paste the standard config.
+```json
+{
+  "mcpServers": {
+    "machship": {
+      "command": "npx",
+      "args": ["-y", "machship-mcp"],
+      "env": {
+        "MACHSHIP_API_TOKEN": "your-token-here"
+      }
+    }
+  }
+}
+```
 
 </details>
+
+### Run directly (test / CLI use)
+
+```bash
+# STDIO mode — pipe JSON-RPC directly
+MACHSHIP_API_TOKEN=your-token npx -y machship-mcp
+
+# HTTP mode — exposes a local MCP endpoint
+MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y machship-mcp
+# MCP endpoint: http://localhost:3000/mcp
+# Health check:  http://localhost:3000/health
+```
 
 ## Environment Variables
 
@@ -189,17 +268,12 @@ Once connected, ask your AI assistant:
 
 ## Transport Modes
 
-### STDIO (default)
+| Mode | When to use |
+|------|-------------|
+| `stdio` (default) | AI desktop clients (Claude Desktop, Cursor, VS Code, etc.) — JSON-RPC over stdin/stdout |
+| `http` | Web integrations, remote servers, or anything that needs an HTTP MCP endpoint |
 
-- JSON-RPC via stdin/stdout — used by Claude Desktop, Cursor, and local AI assistants
-- Run directly: `MACHSHIP_API_TOKEN=your-token npx machship-mcp`
-
-### HTTP
-
-- HTTP transport with streaming support for web integrations
-- MCP endpoint: `http://localhost:3000/mcp`
-- Health check: `http://localhost:3000/health`
-- Run with: `MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx machship-mcp`
+Set the mode via the `TRANSPORT` environment variable (see [Environment Variables](#environment-variables) below).
 
 ## Docker
 
