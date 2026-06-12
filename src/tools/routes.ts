@@ -12,11 +12,19 @@ Use this to find all carrier options (rates, ETAs) before creating a consignment
 
 Args:
   - request (object): Route request including:
-    - companyId: Company ID
-    - fromSuburb, fromPostcode, fromState, fromCountry: Origin location
-    - toSuburb, toPostcode, toState, toCountry: Destination location
-    - items: Array of packages with weight (kg), length/width/height (cm)
-    - despatchDate (optional): Planned despatch date`,
+    - companyId: Company ID (required)
+    - fromLocation: { suburb, postcode, state, country } — origin location
+    - toLocation: { suburb, postcode, state, country } — destination location
+    - items: Array of packages with weight (kg), length/width/height (cm), name (string), quantity (integer > 0)
+    - despatchDate (optional): Planned despatch date (ISO 8601)
+
+Example:
+  {
+    "companyId": 1790,
+    "fromLocation": { "suburb": "Melbourne", "postcode": "3000", "state": "VIC", "country": "AU" },
+    "toLocation": { "suburb": "Sydney", "postcode": "2000", "state": "NSW", "country": "AU" },
+    "items": [{ "weight": 10, "length": 30, "width": 30, "height": 30, "name": "Parcel", "quantity": 1 }]
+  }`,
       inputSchema: z.object({
         request: z.record(z.unknown()).describe("Route request (companyId, from/to location, items with weight/dimensions, optional despatchDate)")
       }).strict(),

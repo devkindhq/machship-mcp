@@ -1,8 +1,8 @@
 {
 	"mcpServers": {
 		"machship": {
-			"command": "npx",
-			"args": ["-y", "machship-mcp"],
+			"command": "node",
+			"args": ["/Users/saadbhutto/Sites/machship-mcp/dist/index.js"],
 			"env": {
 				"MACHSHIP_API_TOKEN": ""
 			}
