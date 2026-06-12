@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerLabelsTools(server: McpServer): void {
   server.registerTool(
@@ -19,9 +19,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getConsignmentPdf", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -44,9 +44,9 @@ Args:
     async ({ consignmentId, printA4 }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getItemPdf", { consignmentId, printA4 });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -71,9 +71,9 @@ Args:
     async ({ consignmentIds, printA4, singlePdf }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getItemPdfsForConsignments", { consignmentIds, printA4, singlePdf });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -94,9 +94,9 @@ Args:
     async ({ manifestId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getManifestPdf", { manifestId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -117,9 +117,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getManifestPdfByConsignmentId", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -140,9 +140,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getCommercialInvoicePdf", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -163,9 +163,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getDangerousGoodsDocumentPdf", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -186,9 +186,9 @@ Args:
     async ({ requests }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/labels/sendLabelsToPrinter", requests);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -209,9 +209,9 @@ Args:
     async ({ consignmentIds }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/labels/groupConsignmentsForPrinting", consignmentIds);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -232,9 +232,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getConsignmentPdfFileInfo", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -257,9 +257,9 @@ Args:
     async ({ consignmentId, printA4 }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getItemPdfFileInfo", { consignmentId, printA4 });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -280,9 +280,9 @@ Args:
     async ({ manifestId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getManifestPdfFileInfo", { manifestId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -303,9 +303,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getDangerousGoodsDocumentPdfFileInfo", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -326,9 +326,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getMO41DocumentPdf", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -349,9 +349,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getMO41DocumentPdfFileInfo", { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -374,9 +374,9 @@ Args:
     async ({ consignmentId, printA4 }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/labels/getSpecialInstructionsPdf", { consignmentId, printA4 });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -399,9 +399,9 @@ Args:
     async ({ consignmentIds, printA4 }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/labels/returnItemPdfsForConsignments", { consignmentIds, printA4 });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

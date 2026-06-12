@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerOrganisationLinksTools(server: McpServer): void {
   server.registerTool(
@@ -19,9 +19,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/getForOrganisation", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -48,9 +48,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/getLinkedFromOrganisations", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -77,9 +77,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/getLinkedToOrganisations", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -100,9 +100,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/getPublicKeyForOrganisation", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -124,9 +124,9 @@ Args:
     async ({ publicKey }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/getOrganisationDetailsByPublicKey", { publicKey });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -147,9 +147,9 @@ Args:
     async ({ request }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/organisationLinks/add", request);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -170,9 +170,9 @@ Args:
     async ({ request }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/organisationLinks/remove", request);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -193,9 +193,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/organisationLinks/resetPublicKeyForOrganisation", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

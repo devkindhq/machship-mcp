@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerAttachmentsTools(server: McpServer): void {
   server.registerTool(
@@ -20,9 +20,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/attachments/getAttachment", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -43,9 +43,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/attachments/getAttachmentPodReport", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -66,9 +66,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/attachments/getAttachmentsByConsignmentIds", { ids });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -98,9 +98,9 @@ Args:
     async ({ attachments }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/attachments/uploadAttachments", attachments);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

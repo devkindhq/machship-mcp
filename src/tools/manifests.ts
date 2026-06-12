@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse, ResponseFormat } from "../client.js";
 
 export function registerManifestsTools(server: McpServer): void {
   server.registerTool(
@@ -16,8 +16,16 @@ Args:
   - retrieveSize (number, optional): Number to retrieve (default 40, max 200)
   - carrierId (number, optional): Filter by carrier
   - includeChildCompanies (boolean, optional): Include sub-companies
-  - startDate (string, optional): Filter from date
-  - endDate (string, optional): Filter to date`,
+  - startDate / endDate (string, optional): Date range filter (ISO 8601)
+  - response_format ('json' | 'markdown'): Output format (default: 'json')
+
+Returns:
+  Array of manifest summary objects:
+  { "id": number, "manifestDate": string, "carrierName": string, "status": string, "consignmentCount": number }
+
+Examples:
+  - Use when: "List today's manifests" -> set startDate/endDate to today
+  - Use when: You need a manifestId to download a manifest PDF`,
       inputSchema: z.object({
         companyId: z.number().int().positive().optional().describe("Company ID"),
         startIndex: z.number().int().min(1).default(1).optional(),
@@ -25,16 +33,18 @@ Args:
         carrierId: z.number().int().positive().optional(),
         includeChildCompanies: z.boolean().optional(),
         startDate: z.string().optional().describe("Filter from date (ISO 8601)"),
-        endDate: z.string().optional().describe("Filter to date (ISO 8601)")
+        endDate: z.string().optional().describe("Filter to date (ISO 8601)"),
+        response_format: z.enum(["json", "markdown"]).default("json")
+          .describe("Output format: 'json' (default) or 'markdown'")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async (params) => {
+    async ({ response_format, ...params }) => {
       try {
-        const data = await apiGet<unknown>("/apiv2/manifests/getAll", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        const data = await apiGet<unknown>("/apiv2/manifests/getAll", params as Record<string, unknown>);
+        return successResponse(data, response_format as ResponseFormat);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -55,9 +65,9 @@ Args:
     async ({ companyId }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/manifests/groupAllUnmanifestedConsignmentsForManifest", companyId);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -78,9 +88,9 @@ Args:
     async ({ consignmentIds }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/manifests/groupConsignmentsForManifest", consignmentIds);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -102,9 +112,9 @@ Args:
     async ({ manifests }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/manifests/manifest", manifests);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -125,9 +135,9 @@ Args:
     async ({ rebooking }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/manifests/rebookPickup", rebooking);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

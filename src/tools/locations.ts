@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse, ResponseFormat } from "../client.js";
 
 export function registerLocationsTools(server: McpServer): void {
   server.registerTool(
@@ -8,21 +8,32 @@ export function registerLocationsTools(server: McpServer): void {
     {
       title: "Search Locations",
       description: `Returns up to 10 Machship locations matching a suburb or postcode search string.
-Use this to look up valid delivery/pickup locations before creating consignments.
+Use this to look up valid delivery/pickup locationIds before creating consignments.
 
 Args:
-  - s (string): Search string — space-separated suburb/postcode (e.g. "Melbourne 3000")`,
+  - s (string): Search string — suburb name, postcode, or both (e.g. "Melbourne 3000")
+  - response_format ('json' | 'markdown'): Output format (default: 'json')
+
+Returns:
+  Array of location objects:
+  { "id": number, "suburb": string, "postcode": string, "state": string, "country": string }
+
+Examples:
+  - Use when: "What location ID is for Sydney 2000?" -> search "Sydney 2000", pick from results
+  - Use when: Validating a delivery address before creating a consignment`,
       inputSchema: z.object({
-        s: z.string().min(2).describe("Search string: suburb name, postcode, or both (e.g. 'Melbourne 3000')")
+        s: z.string().min(2).describe("Search string: suburb name, postcode, or both (e.g. 'Melbourne 3000')"),
+        response_format: z.enum(["json", "markdown"]).default("json")
+          .describe("Output format: 'json' (default) or 'markdown'")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ s }) => {
+    async ({ s, response_format }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/locations/getLocationsWithSearchOptions", { s });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data, response_format as ResponseFormat);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -47,9 +58,9 @@ Args:
     async ({ locations }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/locations/returnLocations", { locations });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -72,9 +83,9 @@ Args:
     async ({ s, options }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/locations/returnLocationsWithSearchOptions", options ?? {}, { s });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

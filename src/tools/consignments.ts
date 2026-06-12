@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerConsignmentsTools(server: McpServer): void {
   server.registerTool(
@@ -23,9 +23,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getConsignment", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -46,9 +46,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignments", { ids });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -69,9 +69,9 @@ Args:
     async ({ references }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignmentsByReference1", references);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -92,9 +92,9 @@ Args:
     async ({ references }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignmentsByReference2", references);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -115,9 +115,9 @@ Args:
     async ({ carrierConsignmentIds }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignmentsByCarrierConsignmentId", carrierConsignmentIds);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -140,9 +140,9 @@ Args:
     async ({ ids, sinceDateCreatedUtc }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignmentStatuses", { ids }, sinceDateCreatedUtc ? { sinceDateCreatedUtc } : undefined);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -167,9 +167,9 @@ Args:
     async ({ statuses }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/updateConsignmentStatuses", statuses);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -198,9 +198,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getUnmanifested", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -229,9 +229,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getActive", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -268,9 +268,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getAll", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -307,9 +307,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getRecentlyCreatedOrUpdatedConsignments", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -336,9 +336,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getCompleted", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -362,9 +362,9 @@ Args:
     async ({ consignment }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/createConsignment", consignment);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -385,9 +385,9 @@ Args:
     async ({ consignment }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/createConsignmentwithComplexItems", consignment);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -408,9 +408,9 @@ Args:
     async ({ consignment }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/createExistingConsignment", consignment);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -431,9 +431,9 @@ Args:
     async ({ consignment }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/editUnmanifestedConsignment", consignment);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -454,9 +454,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/deleteUnmanifestedConsignments", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -477,9 +477,9 @@ Args:
     async ({ references }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/searchConsignments", references);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -500,9 +500,9 @@ Args:
     async ({ companyId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getConsignmentCreationSettings", { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -523,9 +523,9 @@ Args:
     async ({ consignmentId }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/getAttachments", undefined, { consignmentId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -546,9 +546,9 @@ Args:
     async ({ updates }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/updateDespatchDatesForManifest", updates);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -569,9 +569,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getConsignmentByPendingConsignmentId", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -592,9 +592,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getConsignmentForClone", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -615,9 +615,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/consignments/getUnmanifestedConsignmentForEdit", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -638,9 +638,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consignments/returnConsignmentsByPendingConsignmentIds", { ids });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

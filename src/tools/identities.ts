@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerIdentitiesTools(server: McpServer): void {
   server.registerTool(
@@ -24,9 +24,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identities/getIdentities", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -47,9 +47,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identities/getIdentity", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -70,9 +70,9 @@ Args:
     async ({ companyId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identities/getAvailableRoles", { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -123,9 +123,9 @@ Args:
     async ({ identities }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/createIdentities", identities);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -164,9 +164,9 @@ Args:
     async (params) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/updateIdentity", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -187,9 +187,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/deleteIdentities", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -210,9 +210,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/disableIdentities", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -233,9 +233,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/reenableIdentities", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -261,9 +261,9 @@ Args:
     async ({ links }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/linkIdentitiesToCompanies", { links });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -287,9 +287,9 @@ Args:
     async ({ unlinks }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/unlinkIdentitiesFromCompanies", unlinks);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -312,9 +312,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/identities/returnIdentityPublicKeys", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

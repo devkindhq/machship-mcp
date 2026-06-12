@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerCustomSchemasTools(server: McpServer): void {
   server.registerTool(
@@ -15,9 +15,9 @@ Custom schemas extend Machship entities with additional fields.`,
     async () => {
       try {
         const data = await apiGet<unknown>("/api/customSchemas/getAll");
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -38,9 +38,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/api/customSchemas/getByDotNetClassId", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -65,9 +65,9 @@ Args:
     async ({ name, type, schema }) => {
       try {
         const data = await apiPost<unknown>("/api/customSchemas/create", schema, { name, type });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -90,9 +90,9 @@ Args:
     async ({ id, schema }) => {
       try {
         const data = await apiPost<unknown>("/api/customSchemas/updateByDotNetClassId", schema, { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -113,9 +113,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiPost<unknown>("/api/customSchemas/deleteByDotNetClassId", undefined, { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerPendingConsignmentsTools(server: McpServer): void {
   server.registerTool(
@@ -20,9 +20,9 @@ Args:
     async ({ consignment }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/pendingConsignments/createPendingConsignment", consignment);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -43,9 +43,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/pendingConsignments/getPendingConsignment", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -66,9 +66,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/pendingConsignments/returnPendingConsignments", { ids });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -89,9 +89,9 @@ Args:
     async ({ references }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/pendingConsignments/returnPendingConsignmentsByReference1", references);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -112,9 +112,9 @@ Args:
     async ({ references }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/pendingConsignments/returnPendingConsignmentsByReference2", references);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -149,9 +149,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/pendingConsignments/getRecentlyCreatedOrUpdatedPendingConsignments", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -172,9 +172,9 @@ Args:
     async ({ ids }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/pendingConsignments/deletePendingConsignments", ids);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

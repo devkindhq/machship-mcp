@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerCarrierInvoicesTools(server: McpServer): void {
   server.registerTool(
@@ -25,9 +25,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/carrierInvoices/getAll", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -50,9 +50,9 @@ Args:
     async ({ carrierInvoiceId, status }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/carrierInvoices/getEntriesForInvoice", { carrierInvoiceId, status });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -74,9 +74,9 @@ Args:
     async ({ body }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/carrierInvoices/updateAndRepriceConsignment", body);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -97,9 +97,9 @@ Args:
     async ({ body }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/carrierInvoices/attemptAutoReconciliation", body);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

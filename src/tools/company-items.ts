@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, apiDelete, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, apiDelete, errorResponse, successResponse } from "../client.js";
 
 export function registerCompanyItemsTools(server: McpServer): void {
   server.registerTool(
@@ -19,9 +19,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/get", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -46,9 +46,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/getAll", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -71,9 +71,9 @@ Args:
     async ({ companyId, sku }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/getBySku", { companyId, sku });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -94,9 +94,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/getComplex", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -121,9 +121,9 @@ Args:
     async (params) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/getAllComplex", params);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -146,9 +146,9 @@ Args:
     async ({ companyId, sku }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/items/getBySkuComplex", { companyId, sku });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -171,9 +171,9 @@ Args:
     async ({ companyId, item }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/items/createComplex", item, { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -194,9 +194,9 @@ Args:
     async ({ companyItemId }) => {
       try {
         const data = await apiDelete<unknown>("/apiv2/items/delete", { companyItemId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -220,9 +220,9 @@ Args:
     async ({ companyId, skus }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/items/getBySkus", skus, { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

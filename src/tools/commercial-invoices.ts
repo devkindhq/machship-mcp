@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { handleApiError, truncate } from "../client.js";
+import { errorResponse, successResponse } from "../client.js";
 import axios from "axios";
 import FormData from "form-data";
 import { API_BASE_URL } from "../constants.js";
@@ -48,9 +48,9 @@ Args:
             timeout: 30000
           }
         );
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(response.data, null, 2)) }] };
+        return successResponse(response.data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiPost, handleApiError, truncate } from "../client.js";
+import { apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerConsolidationTools(server: McpServer): void {
   server.registerTool(
@@ -20,9 +20,9 @@ Args:
     async ({ options }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consolidation/groupConsignmentsForConsolidation", options);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -44,9 +44,9 @@ Args:
     async ({ request }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consolidation/performConsolidation", request);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -67,9 +67,9 @@ Args:
     async ({ options }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/consolidation/groupAndPerformConsolidation", options);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, apiPost, handleApiError, truncate } from "../client.js";
+import { apiGet, apiPost, errorResponse, successResponse } from "../client.js";
 
 export function registerCompanyLocationsTools(server: McpServer): void {
   server.registerTool(
@@ -19,9 +19,9 @@ Args:
     async ({ id }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/companyLocations/get", { id });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -42,9 +42,9 @@ Args:
     async ({ companyId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/companyLocations/getAll", { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -65,9 +65,9 @@ Args:
     async ({ location }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/companyLocations/create", location);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -88,9 +88,9 @@ Args:
     async ({ location }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/companyLocations/edit", location);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -111,9 +111,9 @@ Args:
     async ({ companyLocationId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/companyLocations/getPermanentPickupsForCompanyLocation", { companyLocationId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -134,9 +134,9 @@ Args:
     async ({ payload }) => {
       try {
         const data = await apiPost<unknown>("/apiv2/companyLocations/addPermanentPickupsToCompanyLocation", payload);
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, handleApiError, truncate } from "../client.js";
+import { apiGet, errorResponse, successResponse } from "../client.js";
 
 export function registerIdentityProvidersTools(server: McpServer): void {
   server.registerTool(
@@ -19,9 +19,9 @@ Args:
     async ({ identityProviderId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identityproviders/GetIdentityProvider", { identityProviderId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -42,9 +42,9 @@ Args:
     async ({ companyId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identityproviders/GetIdentityProvidersForCompany", { companyId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -60,9 +60,9 @@ Args:
     async () => {
       try {
         const data = await apiGet<unknown>("/apiv2/identityproviders/GetIdentityProvidersForLoggedUser", {});
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
@@ -83,9 +83,9 @@ Args:
     async ({ organisationId }) => {
       try {
         const data = await apiGet<unknown>("/apiv2/identityproviders/GetIdentityProvidersForOrganisation", { organisationId });
-        return { content: [{ type: "text" as const, text: truncate(JSON.stringify(data, null, 2)) }] };
+        return successResponse(data);
       } catch (e) {
-        return { content: [{ type: "text" as const, text: handleApiError(e) }] };
+        return errorResponse(e);
       }
     }
   );
