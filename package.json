@@ -1,14 +1,27 @@
 {
-  "name": "machship-mcp-server",
+  "name": "machship-mcp",
   "version": "1.0.0",
-  "description": "MCP server for Machship fulfillment and freight platform API",
+  "description": "MCP server for the Machship freight and fulfillment platform API",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "machship-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "clean": "rm -rf dist"
+    "build": "node --max-old-space-size=4096 node_modules/typescript/bin/tsc",
+    "clean": "rm -rf dist",
+    "prepare": "yarn build",
+    "docker:build": "docker build -t devkind/machship-mcp:latest .",
+    "docker:build:version": "docker build -t devkind/machship-mcp:$(node -p \"require('./package.json').version\") -t devkind/machship-mcp:latest .",
+    "docker:push": "docker push devkind/machship-mcp:latest",
+    "docker:push:version": "docker push devkind/machship-mcp:$(node -p \"require('./package.json').version\") && docker push devkind/machship-mcp:latest",
+    "docker:run": "docker run --rm -e MACHSHIP_API_TOKEN=${MACHSHIP_API_TOKEN} -e TRANSPORT=http -p 3000:3000 devkind/machship-mcp:latest",
+    "docker:release": "yarn docker:build:version && yarn docker:push:version"
   },
   "engines": {
     "node": ">=18"
