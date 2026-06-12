@@ -1,0 +1,43 @@
+{
+	"manifest_version": "0.2",
+	"name": "machship-mcp",
+	"version": "1.0.0",
+	"description": "Model Context Protocol server for the Machship freight management platform",
+	"author": {
+		"name": "Devkind",
+		"url": "https://devkind.com.au"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/devkindhq/machship-mcp"
+	},
+	"license": "ISC",
+	"server": {
+		"type": "node",
+		"entry_point": "dist/index.js",
+		"mcp_config": {
+			"command": "node",
+			"args": [
+				"${__dirname}/dist/index.js"
+			],
+			"env": {
+				"MACHSHIP_API_TOKEN": "${user_config.machship_api_token}"
+			}
+		}
+	},
+	"user_config": {
+		"machship_api_token": {
+			"type": "string",
+			"title": "Machship API Token",
+			"description": "Your Machship Bearer token (Settings → API → Generate token)",
+			"required": true,
+			"sensitive": true
+		},
+		"machship_api_url": {
+			"type": "string",
+			"title": "Machship API URL",
+			"description": "Override the Machship API base URL (default: https://live.machship.com)",
+			"required": false
+		}
+	}
+}

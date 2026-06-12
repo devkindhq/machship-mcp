@@ -1,0 +1,11 @@
+{
+	"mcpServers": {
+		"machship": {
+			"command": "npx",
+			"args": ["-y", "machship-mcp"],
+			"env": {
+				"MACHSHIP_API_TOKEN": ""
+			}
+		}
+	}
+}
