@@ -18,6 +18,7 @@
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { VERSION, SERVER_NAME } from "./utils/constants.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express from "express";
@@ -46,8 +47,8 @@ import { registerRoutesTools } from "./tools/routes.js";
 
 function createServer(): McpServer {
   const server = new McpServer({
-    name: "machship-mcp-server",
-    version: "1.0.0"
+    name: SERVER_NAME,
+    version: VERSION,
   });
 
   registerAuthenticateTools(server);

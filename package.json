@@ -1,42 +1,56 @@
 {
-  "name": "machship-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for the Machship freight and fulfillment platform API",
-  "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "machship-mcp": "dist/index.js"
-  },
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts",
-    "build": "node --max-old-space-size=4096 node_modules/typescript/bin/tsc",
-    "clean": "rm -rf dist",
-    "prepare": "yarn build",
-    "docker:build": "docker build -t devkind/machship-mcp:latest .",
-    "docker:build:version": "docker build -t devkind/machship-mcp:$(node -p \"require('./package.json').version\") -t devkind/machship-mcp:latest .",
-    "docker:push": "docker push devkind/machship-mcp:latest",
-    "docker:push:version": "docker push devkind/machship-mcp:$(node -p \"require('./package.json').version\") && docker push devkind/machship-mcp:latest",
-    "docker:run": "docker run --rm -e MACHSHIP_API_TOKEN=${MACHSHIP_API_TOKEN} -e TRANSPORT=http -p 3000:3000 devkind/machship-mcp:latest",
-    "docker:release": "yarn docker:build:version && yarn docker:push:version"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.6.1",
-    "@types/express": "^5.0.6",
-    "axios": "^1.7.9",
-    "express": "^5.2.1",
-    "form-data": "^4.0.5",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "@types/node": "^22.10.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
-  }
+	"name": "machship-mcp",
+	"version": "1.0.0",
+	"description": "MCP server for the Machship freight and fulfillment platform API",
+	"type": "module",
+	"main": "dist/index.js",
+	"bin": {
+		"machship-mcp": "dist/index.js"
+	},
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"start": "node dist/index.js",
+		"dev": "tsx watch src/index.ts",
+		"build": "node --max-old-space-size=4096 node_modules/typescript/bin/tsc && node scripts/ensure-executable.js",
+		"clean": "rm -rf dist",
+		"prepare": "yarn build",
+		"lint": "eslint src/",
+		"format": "prettier --write src/",
+		"docker:build": "docker build -t devkind/machship-mcp:latest .",
+		"docker:build:version": "docker build -t devkind/machship-mcp:$(node -p \"require('./package.json').version\") -t devkind/machship-mcp:latest .",
+		"docker:push": "docker push devkind/machship-mcp:latest",
+		"docker:push:version": "docker push devkind/machship-mcp:$(node -p \"require('./package.json').version\") && docker push devkind/machship-mcp:latest",
+		"docker:run": "docker run --rm -e MACHSHIP_API_TOKEN=${MACHSHIP_API_TOKEN} -e TRANSPORT=http -p 3000:3000 devkind/machship-mcp:latest",
+		"docker:release": "yarn docker:build:version && yarn docker:push:version"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.6.1",
+		"@types/express": "^5.0.6",
+		"axios": "^1.7.9",
+		"express": "^5.2.1",
+		"form-data": "^4.0.5",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.0.0",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/exec": "^6.0.3",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^10.0.0",
+		"@semantic-release/npm": "^12.0.0",
+		"@types/node": "^22.10.0",
+		"eslint": "^9.0.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"prettier": "^3.0.0",
+		"semantic-release": "^24.0.0",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.0.0"
+	}
 }
