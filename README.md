@@ -7,10 +7,11 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 [![NPM Version](https://img.shields.io/npm/v/machship-mcp)](https://www.npmjs.com/package/machship-mcp)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Built by Devkind](https://img.shields.io/badge/Built%20by-Devkind-blue)](https://devkind.com.au)
+[![smithery badge](https://smithery.ai/badge/devkindhq/machship-mcp)](https://smithery.ai/servers/devkindhq/machship-mcp)
 
 ## Features
 
-- **Full Machship API Coverage**: ~65 tools across 21 modules — consignments, quotes, labels, manifests, carriers, locations, and more
+- **Full Machship API Coverage**: 125 tools across 21 modules — consignments, quotes, labels, manifests, carriers, locations, and more
 - **Dual Transport Support**: STDIO and HTTP transports for AI assistant and web integration
 - **Type Safety**: Full TypeScript implementation with Zod schema validation
 - **npx Ready**: Zero-install usage via `npx machship-mcp`
@@ -32,6 +33,8 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 | Consolidation | group, perform, group+perform |
 | CustomSchemas | get all, get by id, create, update, delete |
 | FinancialInvoice | list posted, get by document number |
+| Identities | create, get, list, update, delete, enable/disable, link to companies, public keys |
+| IdentityProviders | get by id, list by company/user/organisation |
 | Labels | consignment PDF, item PDF, manifest PDF, batch zip, print, dangerous goods |
 | Locations | search, exact match, with options |
 | Manifests | list, group, manifest/book, rebook pickup |
@@ -41,7 +44,7 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 | Quotes | create, create with complex items, list, get |
 | Routes | get routes, batch routes, complex items routes |
 
-**Total: ~65 tools**
+**Total: 125 tools**
 
 ## Quick Start (No Install Required)
 
@@ -341,25 +344,6 @@ yarn docker:push:version    # Push version tag + latest to Docker Hub
 yarn docker:release         # Full pipeline: build + tag + push
 ```
 
-### Publishing to npm
-
-```bash
-# Login to npm
-npm login
-
-# Publish
-npm publish
-```
-
-### Publishing to Docker Hub
-
-```bash
-# Login to Docker Hub
-docker login
-
-# Build, tag, and push
-yarn docker:release
-```
 
 ## License
 
