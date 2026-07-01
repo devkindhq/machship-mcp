@@ -28,10 +28,10 @@ Examples:
   - Use when: You need a manifestId to download a manifest PDF`,
       inputSchema: z.object({
         companyId: z.number().int().positive().optional().describe("Company ID"),
-        startIndex: z.number().int().min(1).default(1).optional(),
-        retrieveSize: z.number().int().min(1).max(200).default(40).optional(),
-        carrierId: z.number().int().positive().optional(),
-        includeChildCompanies: z.boolean().optional(),
+        startIndex: z.number().int().min(1).default(1).optional().describe("Pagination start index (default 1)"),
+        retrieveSize: z.number().int().min(1).max(200).default(40).optional().describe("Number of results to return (default 40, max 200)"),
+        carrierId: z.number().int().positive().optional().describe("Filter by carrier ID"),
+        includeChildCompanies: z.boolean().optional().describe("Include manifests from child companies"),
         startDate: z.string().optional().describe("Filter from date (ISO 8601)"),
         endDate: z.string().optional().describe("Filter to date (ISO 8601)"),
         response_format: z.enum(["json", "markdown"]).default("json")

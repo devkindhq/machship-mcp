@@ -138,11 +138,11 @@ Args:
         companyId: z.number().int().positive().describe("Company ID"),
         fromDateUtc: z.string().describe("Start datetime UTC (ISO 8601)"),
         toDateUtc: z.string().describe("End datetime UTC (ISO 8601)"),
-        startIndex: z.number().int().min(1).optional(),
-        retrieveSize: z.number().int().min(1).max(200).optional(),
-        carrierId: z.number().int().positive().optional(),
-        includeChildCompanies: z.boolean().optional(),
-        getDeleted: z.boolean().optional()
+        startIndex: z.number().int().min(1).optional().describe("Pagination start index"),
+        retrieveSize: z.number().int().min(1).max(200).optional().describe("Number of results to return (max 200)"),
+        carrierId: z.number().int().positive().optional().describe("Filter by carrier ID"),
+        includeChildCompanies: z.boolean().optional().describe("Include pending consignments from child companies"),
+        getDeleted: z.boolean().optional().describe("Include deleted pending consignments")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
