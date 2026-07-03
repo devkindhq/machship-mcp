@@ -1,6 +1,7 @@
 {
-	"manifest_version": "0.2",
+	"manifest_version": "0.3",
 	"name": "machship-mcp",
+	"display_name": "Machship MCP",
 	"version": "1.0.0",
 	"description": "Model Context Protocol server for the Machship freight management platform",
 	"author": {
@@ -11,7 +12,15 @@
 		"type": "git",
 		"url": "https://github.com/devkindhq/machship-mcp"
 	},
+	"homepage": "https://github.com/devkindhq/machship-mcp#readme",
 	"license": "ISC",
+	"keywords": [
+		"mcp",
+		"machship",
+		"freight",
+		"logistics",
+		"shipping"
+	],
 	"server": {
 		"type": "node",
 		"entry_point": "dist/index.js",
@@ -21,7 +30,10 @@
 				"${__dirname}/dist/index.js"
 			],
 			"env": {
-				"MACHSHIP_API_TOKEN": "${user_config.machship_api_token}"
+				"MACHSHIP_API_TOKEN": "${user_config.machship_api_token}",
+				"MACHSHIP_API_URL": "${user_config.machship_api_url}",
+				"TRANSPORT": "${user_config.transport}",
+				"PORT": "${user_config.port}"
 			}
 		}
 	},
@@ -37,7 +49,22 @@
 			"type": "string",
 			"title": "Machship API URL",
 			"description": "Override the Machship API base URL (default: https://live.machship.com)",
-			"required": false
+			"required": false,
+			"default": "https://live.machship.com"
+		},
+		"transport": {
+			"type": "string",
+			"title": "Transport Mode",
+			"description": "How the server communicates: 'stdio' for AI desktop clients (default), 'http' for web integrations",
+			"required": false,
+			"default": "stdio"
+		},
+		"port": {
+			"type": "number",
+			"title": "HTTP Port",
+			"description": "Port for HTTP transport mode (default: 3000, only used when Transport Mode is 'http')",
+			"required": false,
+			"default": 3000
 		}
 	}
 }

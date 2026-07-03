@@ -254,14 +254,14 @@ Args:
   - filterByEtaCompletedOrDespatch (string, optional): Filter by ETA/despatch status`,
       inputSchema: z.object({
         companyId: z.number().int().positive().describe("Company ID"),
-        startIndex: z.number().int().min(1).default(1).optional(),
-        retrieveSize: z.number().int().min(1).max(200).default(40).optional(),
-        carrierId: z.number().int().positive().optional(),
-        includeChildCompanies: z.boolean().optional(),
-        includeDeletedConsignments: z.boolean().optional(),
+        startIndex: z.number().int().min(1).default(1).optional().describe("Pagination start index (default 1)"),
+        retrieveSize: z.number().int().min(1).max(200).default(40).optional().describe("Number of results to return (default 40, max 200)"),
+        carrierId: z.number().int().positive().optional().describe("Filter by carrier ID"),
+        includeChildCompanies: z.boolean().optional().describe("Include consignments from child companies"),
+        includeDeletedConsignments: z.boolean().optional().describe("Include deleted consignments in results"),
         fromDateTimeLocal: z.string().optional().describe("Start date filter (local time ISO 8601)"),
         toDateTimeLocal: z.string().optional().describe("End date filter (local time ISO 8601)"),
-        filterByEtaCompletedOrDespatch: z.string().optional()
+        filterByEtaCompletedOrDespatch: z.string().optional().describe("Filter by ETA, completed, or despatch status")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
@@ -295,12 +295,12 @@ Args:
         companyId: z.number().int().positive().describe("Company ID"),
         fromDateUtc: z.string().describe("Start datetime UTC (ISO 8601)"),
         toDateUtc: z.string().describe("End datetime UTC (ISO 8601)"),
-        startIndex: z.number().int().min(1).default(1).optional(),
-        retrieveSize: z.number().int().min(1).max(200).default(40).optional(),
-        carrierId: z.number().int().positive().optional(),
-        includeChildCompanies: z.boolean().optional(),
-        getNotes: z.boolean().optional(),
-        getReconciliationData: z.boolean().optional()
+        startIndex: z.number().int().min(1).default(1).optional().describe("Pagination start index (default 1)"),
+        retrieveSize: z.number().int().min(1).max(200).default(40).optional().describe("Number of results to return (default 40, max 200)"),
+        carrierId: z.number().int().positive().optional().describe("Filter by carrier ID"),
+        includeChildCompanies: z.boolean().optional().describe("Include consignments from child companies"),
+        getNotes: z.boolean().optional().describe("Include notes in the response"),
+        getReconciliationData: z.boolean().optional().describe("Include reconciliation data in the response")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
@@ -329,7 +329,7 @@ Args:
         companyId: z.number().int().positive().describe("Company ID"),
         startDate: z.string().describe("Start date (ISO 8601)"),
         endDate: z.string().describe("End date (ISO 8601)"),
-        includeChildCompanies: z.boolean().optional()
+        includeChildCompanies: z.boolean().optional().describe("Include consignments from child companies")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },

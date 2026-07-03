@@ -77,10 +77,6 @@ function createServer(): McpServer {
 }
 
 async function runStdio(): Promise<void> {
-  if (!process.env.MACHSHIP_API_TOKEN) {
-    console.error("ERROR: MACHSHIP_API_TOKEN environment variable is required");
-    process.exit(1);
-  }
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
@@ -88,11 +84,6 @@ async function runStdio(): Promise<void> {
 }
 
 async function runHTTP(): Promise<void> {
-  if (!process.env.MACHSHIP_API_TOKEN) {
-    console.error("ERROR: MACHSHIP_API_TOKEN environment variable is required");
-    process.exit(1);
-  }
-
   const app = express();
   app.use(express.json());
 
@@ -111,13 +102,13 @@ async function runHTTP(): Promise<void> {
     res.json({ status: "ok", server: "machship-mcp-server" });
   });
 
-  const port = parseInt(process.env.PORT ?? "3000");
+  const port = parseInt(process.env.PORT || "3000");
   app.listen(port, () => {
     console.error(`Machship MCP server running on http://localhost:${port}/mcp`);
   });
 }
 
-const transport = process.env.TRANSPORT ?? "stdio";
+const transport = process.env.TRANSPORT || "stdio";
 if (transport === "http") {
   runHTTP().catch((error: unknown) => {
     console.error("Server error:", error);

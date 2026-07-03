@@ -4,16 +4,17 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 
 **Built by [Devkind](https://devkind.com.au)** — cutting-edge software development serving businesses globally.
 
-[![NPM Version](https://img.shields.io/npm/v/machship-mcp)](https://www.npmjs.com/package/machship-mcp)
+[![NPM Version](https://img.shields.io/npm/v/%40devkind%2Fmachship-mcp)](https://www.npmjs.com/package/@devkind/machship-mcp)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Built by Devkind](https://img.shields.io/badge/Built%20by-Devkind-blue)](https://devkind.com.au)
+[![smithery badge](https://smithery.ai/badge/devkind/machship-mcp)](https://smithery.ai/servers/devkind/machship-mcp)
 
 ## Features
 
-- **Full Machship API Coverage**: ~65 tools across 21 modules — consignments, quotes, labels, manifests, carriers, locations, and more
+- **Full Machship API Coverage**: 125 tools across 21 modules — consignments, quotes, labels, manifests, carriers, locations, and more
 - **Dual Transport Support**: STDIO and HTTP transports for AI assistant and web integration
 - **Type Safety**: Full TypeScript implementation with Zod schema validation
-- **npx Ready**: Zero-install usage via `npx machship-mcp`
+- **npx Ready**: Zero-install usage via `npx @devkind/machship-mcp`
 - **Docker Support**: Production Docker image on Docker Hub
 - **Any MCP Client**: Works with Claude Desktop, Cursor, VS Code, Windsurf, and more
 
@@ -32,6 +33,8 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 | Consolidation | group, perform, group+perform |
 | CustomSchemas | get all, get by id, create, update, delete |
 | FinancialInvoice | list posted, get by document number |
+| Identities | create, get, list, update, delete, enable/disable, link to companies, public keys |
+| IdentityProviders | get by id, list by company/user/organisation |
 | Labels | consignment PDF, item PDF, manifest PDF, batch zip, print, dangerous goods |
 | Locations | search, exact match, with options |
 | Manifests | list, group, manifest/book, rebook pickup |
@@ -41,7 +44,7 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 | Quotes | create, create with complex items, list, get |
 | Routes | get routes, batch routes, complex items routes |
 
-**Total: ~65 tools**
+**Total: 125 tools**
 
 ## Quick Start (No Install Required)
 
@@ -72,7 +75,7 @@ Edit `~/.claude/claude_desktop_config.json` (create it if it doesn't exist):
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -88,7 +91,7 @@ Restart Claude Desktop — the Machship tools will appear automatically.
 Run once to add to your project MCP config:
 
 ```bash
-claude mcp add machship -- npx -y machship-mcp
+claude mcp add machship -- npx -y @devkind/machship-mcp
 ```
 
 Then set the token in your environment or `.env`:
@@ -104,7 +107,7 @@ Or add it directly to `.mcp.json` after running the command above:
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -125,7 +128,7 @@ Or add it directly to `.mcp.json` after running the command above:
 Go to `Cursor Settings` → `MCP` → `Add new MCP Server`:
 - **Name:** Machship MCP
 - **Type:** command
-- **Command:** `npx -y machship-mcp`
+- **Command:** `npx -y @devkind/machship-mcp`
 - **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
 
 </details>
@@ -136,7 +139,7 @@ Go to `Cursor Settings` → `MCP` → `Add new MCP Server`:
 Install via the VS Code CLI (one command):
 
 ```bash
-code --add-mcp '{"name":"machship","command":"npx","args":["-y","machship-mcp"],"env":{"MACHSHIP_API_TOKEN":"your-token-here"}}'
+code --add-mcp '{"name":"machship","command":"npx","args":["-y","@devkind/machship-mcp"],"env":{"MACHSHIP_API_TOKEN":"your-token-here"}}'
 ```
 
 Or follow the MCP [setup guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) and use this config:
@@ -146,7 +149,7 @@ Or follow the MCP [setup guide](https://code.visualstudio.com/docs/copilot/chat/
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -167,7 +170,7 @@ Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/casca
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -184,7 +187,7 @@ Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/casca
 Go to `Advanced settings` → `Extensions` → `Add custom extension`:
 - **Name:** Machship MCP
 - **Type:** STDIO
-- **Command:** `npx -y machship-mcp`
+- **Command:** `npx -y @devkind/machship-mcp`
 - **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
 
 </details>
@@ -199,7 +202,7 @@ Go to `Program` in the right sidebar → `Install` → `Edit mcp.json` and add:
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -220,7 +223,7 @@ Go to `Settings` → `AI` → `Manage MCP Servers` → `+ Add`, or use the slash
   "mcpServers": {
     "machship": {
       "command": "npx",
-      "args": ["-y", "machship-mcp"],
+      "args": ["-y", "@devkind/machship-mcp"],
       "env": {
         "MACHSHIP_API_TOKEN": "your-token-here"
       }
@@ -235,10 +238,10 @@ Go to `Settings` → `AI` → `Manage MCP Servers` → `+ Add`, or use the slash
 
 ```bash
 # STDIO mode — pipe JSON-RPC directly
-MACHSHIP_API_TOKEN=your-token npx -y machship-mcp
+MACHSHIP_API_TOKEN=your-token npx -y @devkind/machship-mcp
 
 # HTTP mode — exposes a local MCP endpoint
-MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y machship-mcp
+MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y @devkind/machship-mcp
 # MCP endpoint: http://localhost:3000/mcp
 # Health check:  http://localhost:3000/health
 ```
@@ -341,25 +344,6 @@ yarn docker:push:version    # Push version tag + latest to Docker Hub
 yarn docker:release         # Full pipeline: build + tag + push
 ```
 
-### Publishing to npm
-
-```bash
-# Login to npm
-npm login
-
-# Publish
-npm publish
-```
-
-### Publishing to Docker Hub
-
-```bash
-# Login to Docker Hub
-docker login
-
-# Build, tag, and push
-yarn docker:release
-```
 
 ## License
 

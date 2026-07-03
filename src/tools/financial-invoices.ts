@@ -17,8 +17,8 @@ Args:
       inputSchema: z.object({
         startDate: z.string().optional().describe("Start date filter (ISO 8601)"),
         endDate: z.string().optional().describe("End date filter (ISO 8601)"),
-        startIndex: z.number().int().min(1).default(1).optional(),
-        retrieveSize: z.number().int().min(1).max(100).default(100).optional()
+        startIndex: z.number().int().min(1).default(1).optional().describe("Pagination start index (default 1)"),
+        retrieveSize: z.number().int().min(1).max(100).default(100).optional().describe("Number of results to return (default 100, max 100)")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },

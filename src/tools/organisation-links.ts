@@ -38,10 +38,10 @@ Args:
   - sort (string, optional): Sort field
   - searchText (string, optional): Filter by name`,
       inputSchema: z.object({
-        startIndex: z.number().int().min(1).optional(),
-        retrieveSize: z.number().int().min(1).max(100).optional(),
-        sort: z.string().optional(),
-        searchText: z.string().optional()
+        startIndex: z.number().int().min(1).optional().describe("Pagination start index"),
+        retrieveSize: z.number().int().min(1).max(100).optional().describe("Number of results to return (max 100)"),
+        sort: z.string().optional().describe("Sort field name"),
+        searchText: z.string().optional().describe("Filter results by organisation name")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
@@ -67,10 +67,10 @@ Args:
   - sort (string, optional): Sort field
   - searchText (string, optional): Filter by name`,
       inputSchema: z.object({
-        startIndex: z.number().int().min(1).optional(),
-        retrieveSize: z.number().int().min(1).max(100).optional(),
-        sort: z.string().optional(),
-        searchText: z.string().optional()
+        startIndex: z.number().int().min(1).optional().describe("Pagination start index"),
+        retrieveSize: z.number().int().min(1).max(100).optional().describe("Number of results to return (max 100)"),
+        sort: z.string().optional().describe("Sort field name"),
+        searchText: z.string().optional().describe("Filter results by organisation name")
       }).strict(),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },

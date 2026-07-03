@@ -1,5 +1,6 @@
 src/
 *.ts
+.claude/
 !*.d.ts
 coverage/
 .github/
@@ -18,7 +19,7 @@ scripts/
 *.log
 .env
 .env.*
-node_modules/
+.mcp.json
 .npmignore
 .mcpbignore
 .releaserc.json

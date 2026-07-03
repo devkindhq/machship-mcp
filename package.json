@@ -1,5 +1,5 @@
 {
-	"name": "machship-mcp",
+	"name": "@devkind/machship-mcp",
 	"version": "1.0.0",
 	"description": "MCP server for the Machship freight and fulfillment platform API",
 	"type": "module",
@@ -10,6 +10,31 @@
 	"files": [
 		"dist/"
 	],
+	"keywords": [
+		"mcp",
+		"model-context-protocol",
+		"machship",
+		"freight",
+		"logistics",
+		"shipping",
+		"consignment",
+		"ai",
+		"llm",
+		"claude"
+	],
+	"author": {
+		"name": "Devkind",
+		"url": "https://devkind.com.au"
+	},
+	"license": "ISC",
+	"homepage": "https://github.com/devkindhq/machship-mcp#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/devkindhq/machship-mcp.git"
+	},
+	"bugs": {
+		"url": "https://github.com/devkindhq/machship-mcp/issues"
+	},
 	"scripts": {
 		"start": "node dist/index.js",
 		"dev": "tsx watch src/index.ts",

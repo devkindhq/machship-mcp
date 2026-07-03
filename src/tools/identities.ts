@@ -109,12 +109,12 @@ Args:
           owningCompanyId: z.number().int().positive().describe("Owning company ID"),
           uniqueId: z.string().optional().describe("Unique ID"),
           password: z.string().optional().describe("Password"),
-          phone: z.string().optional(),
-          businessPhone: z.string().optional(),
-          mobile: z.string().optional(),
-          position: z.string().optional(),
-          notes: z.string().optional(),
-          enableEmailNotifications: z.boolean().optional(),
+          phone: z.string().optional().describe("Phone number"),
+          businessPhone: z.string().optional().describe("Business phone number"),
+          mobile: z.string().optional().describe("Mobile number"),
+          position: z.string().optional().describe("Job position or title"),
+          notes: z.string().optional().describe("Additional notes about the identity"),
+          enableEmailNotifications: z.boolean().optional().describe("Enable email notifications for this identity"),
           userAndCompanyLinks: z.array(z.record(z.unknown())).optional().describe("Company/role links")
         })).min(1).describe("Identities to create")
       }).strict(),
@@ -153,11 +153,11 @@ Args:
         emailAddress: z.string().email().describe("Email address"),
         owningCompanyId: z.number().int().positive().describe("Owning company ID"),
         password: z.string().optional().describe("New password (optional)"),
-        phone: z.string().optional(),
-        businessPhone: z.string().optional(),
-        mobile: z.string().optional(),
-        position: z.string().optional(),
-        notes: z.string().optional()
+        phone: z.string().optional().describe("Phone number"),
+        businessPhone: z.string().optional().describe("Business phone number"),
+        mobile: z.string().optional().describe("Mobile number"),
+        position: z.string().optional().describe("Job position or title"),
+        notes: z.string().optional().describe("Additional notes about the identity")
       }).strict(),
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }
     },

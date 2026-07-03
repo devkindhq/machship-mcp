@@ -1,7 +1,7 @@
 name: machship-mcp
-description: Model Context Protocol server for the Machship freight management platform
+description: Model Context Protocol server for the Machship freight management platform. Provides 125 tools across 21 modules — consignment management, quoting, labelling, manifesting, carriers, locations, and more.
 vendor: Devkind
-homepage: https://devkind.com.au
+homepage: https://github.com/devkindhq/machship-mcp
 license: ISC
 startCommand:
   type: stdio
@@ -15,14 +15,27 @@ startCommand:
         type: string
         description: Override the Machship API base URL
         default: https://live.machship.com
+      transport:
+        type: string
+        description: Transport mode — 'stdio' for AI desktop clients (default), 'http' for web integrations
+        default: stdio
+        enum:
+          - stdio
+          - http
+      port:
+        type: number
+        description: Port for HTTP transport mode (default 3000, only used when transport is 'http')
+        default: 3000
     required:
       - apiToken
   commandFunction: |-
     (config) => ({
       command: "npx",
-      args: ["-y", "machship-mcp"],
+      args: ["-y", "@devkind/machship-mcp"],
       env: {
         MACHSHIP_API_TOKEN: config.apiToken,
-        ...(config.apiUrl ? { MACHSHIP_API_URL: config.apiUrl } : {})
+        ...(config.apiUrl ? { MACHSHIP_API_URL: config.apiUrl } : {}),
+        ...(config.transport ? { TRANSPORT: config.transport } : {}),
+        ...(config.port ? { PORT: String(config.port) } : {})
       }
     })

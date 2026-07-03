@@ -8,3 +8,12 @@ yarn-debug.log*
 yarn-error.log*
 *.bak
 .trigger-ci
+
+# Local MCP client config may contain a real API token — never commit it
+.mcp.json
+
+# Claude Code local settings
+.claude/
+
+# MCPB build artifacts
+*.mcpb
