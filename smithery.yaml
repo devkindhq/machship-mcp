@@ -31,7 +31,7 @@ startCommand:
   commandFunction: |-
     (config) => ({
       command: "npx",
-      args: ["-y", "machship-mcp"],
+      args: ["-y", "@devkind/machship-mcp"],
       env: {
         MACHSHIP_API_TOKEN: config.apiToken,
         ...(config.apiUrl ? { MACHSHIP_API_URL: config.apiUrl } : {}),

@@ -1,5 +1,5 @@
 {
-	"name": "machship-mcp",
+	"name": "@devkind/machship-mcp",
 	"version": "1.0.0",
 	"description": "MCP server for the Machship freight and fulfillment platform API",
 	"type": "module",
