@@ -4,7 +4,8 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+# Skip "prepare" (yarn build): src/ and tsconfig.json are not copied yet
+RUN yarn install --frozen-lockfile --ignore-scripts
 
 COPY tsconfig.json ./
 COPY src ./src
