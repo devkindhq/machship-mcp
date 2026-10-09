@@ -39,6 +39,7 @@
 		"start": "node dist/index.js",
 		"dev": "tsx watch src/index.ts",
 		"build": "node --max-old-space-size=4096 node_modules/typescript/bin/tsc && node scripts/ensure-executable.js",
+		"bundle": "yarn build && node scripts/sync-manifest-tools.js && node scripts/build-mcpb.js",
 		"clean": "rm -rf dist",
 		"prepare": "yarn build",
 		"lint": "eslint src/",
@@ -63,6 +64,7 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@anthropic-ai/mcpb": "^2.1.2",
 		"@eslint/js": "^9.0.0",
 		"@semantic-release/changelog": "^6.0.3",
 		"@semantic-release/exec": "^6.0.3",

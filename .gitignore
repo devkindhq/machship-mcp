@@ -19,3 +19,4 @@ yarn-error.log*
 
 # MCPB build artifacts
 *.mcpb
+.mcpb-stage/

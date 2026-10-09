@@ -46,10 +46,22 @@ import { registerQuotesTools } from "./tools/quotes.js";
 import { registerRoutesTools } from "./tools/routes.js";
 
 function createServer(): McpServer {
-  const server = new McpServer({
-    name: SERVER_NAME,
-    version: VERSION,
-  });
+  const server = new McpServer(
+    {
+      name: SERVER_NAME,
+      version: VERSION,
+    },
+    {
+      instructions: `Tools for the Machship freight platform. Typical flow:
+1. machship_get_companies to find the companyId; most tools need it.
+2. machship_search_locations to resolve suburbs/postcodes.
+3. machship_get_routes for live rates, or machship_create_quote to save a quote.
+4. machship_create_consignment to book; edit or delete only while unmanifested.
+5. Labels (prefer the *_file_info tools, which return base64 PDFs), then machship_manifest_consignments to dispatch to the carrier.
+6. machship_get_consignment_statuses to track.
+Notes: machship_update_identity overwrites omitted fields with null. machship_get_items_by_skus silently drops unknown SKUs. Text output is capped at 25,000 characters; full data is in structuredContent.`,
+    }
+  );
 
   registerAuthenticateTools(server);
   registerAttachmentsTools(server);
