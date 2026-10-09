@@ -7,7 +7,7 @@ Operational guide and reference for AI agents maintaining, extending, or consumi
 ## 1. Environment & Architecture
 
 ### Identity & Runtime
-- **Package:** `@devkind/machship-mcp` (Node.js >= 18, ESM, TypeScript target `ES2022`).
+- **Package:** `@devkind/machship-mcp` (runtime Node.js >= 18, ESM, TypeScript target `ES2022`). Development needs Node.js 22.14+ or 24.10+: semantic-release 25 declares that engine range and Yarn 1 enforces it on `yarn install`.
 - **MCP Framework:** High-level `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` (SDK `^1.6.1`).
 - **Catalog Tool Count:** 125 tools across 21 domain modules in `src/tools/`.
 - **Server Name & Version:** `machship-mcp` / `1.0.0` defined in `src/utils/constants.ts`.
@@ -23,7 +23,7 @@ Transport mode is chosen via `TRANSPORT`:
 ### Configuration Variables
 | Variable | Default | Purpose |
 | :--- | :--- | :--- |
-| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip Bearer/token key. Deferred verification allows metadata listing without a token. |
+| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip API token, sent in the `token` header. Deferred verification allows metadata listing without a token. |
 | `MACHSHIP_API_URL` | `https://live.machship.com` | Base API URL. Target `https://sandbox-api.machship.com` for testing. *Never use `MACHSHIP_BASE_URL` (ignored).* |
 | `TRANSPORT` | `stdio` | `stdio` or `http`. |
 | `PORT` | `3000` | HTTP listening port when `TRANSPORT=http`. |
@@ -429,6 +429,24 @@ yarn lint
 yarn dev
 ```
 
-### Version Bumping
-Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json`, and `manifest.json`.
+### Package Manager
+Yarn 1 only (`yarn.lock`, `"packageManager": "yarn@1.22.22"`). `package-lock.json` is gitignored; never run `npm install`. Use `yarn audit`, not `npm audit`.
+
+### Single Zod Copy (`resolutions`)
+`package.json` pins `"resolutions": { "zod": "3.25.76" }`. The MCP SDK accepts `zod ^3.25 || ^4.0`; without the pin, `yarn upgrade` installs a second zod 4 copy under the SDK and `tsc` runs out of memory. Remove the pin only when migrating the tools to zod 4.
+
+### MCPB Bundle (Smithery)
+```bash
+yarn bundle   # build + sync manifest tools + pack machship-mcp.mcpb
+```
+- `scripts/sync-manifest-tools.js` starts `dist/index.js` without a token and writes `manifest.json` `tools` from `tools/list`. Commit the result whenever tools change.
+- `scripts/build-mcpb.js` packs a staging copy with production dependencies only, then runs `mcpb validate` and `mcpb pack`.
+- Smithery reads listing data from the bundle `manifest.json`; `smithery.yaml` is not used.
+
+### Version Bumping & Releases
+Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json` (both version fields), and `manifest.json`.
+
+Releases run on push to `main` (semantic-release): `feat:`/`fix:` commits trigger a version bump, `yarn bundle`, npm publish (public), a commit of the version files, and a GitHub release with `machship-mcp.mcpb` attached.
+
+npm auth uses trusted publishing (OIDC): the release job runs on Node 24 (npm 11) with `id-token: write`, and the package has a trusted publisher for `devkindhq/machship-mcp` / `ci-semantic-release.yml`. No `NPM_TOKEN` secret should exist; a short-lived token was used only for the first publish. Do not add `@semantic-release/npm` or `@semantic-release/github` to `devDependencies` — semantic-release loads its own bundled copies first, so a separate copy is silently ignored.
 
