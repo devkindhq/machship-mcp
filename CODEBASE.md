@@ -446,7 +446,9 @@ yarn bundle   # build + sync manifest tools + pack machship-mcp.mcpb
 ### Version Bumping & Releases
 Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json` (both version fields), and `manifest.json`.
 
-Releases run on push to `main` (semantic-release): `feat:`/`fix:` commits trigger a version bump, `yarn bundle`, npm publish (public), a commit of the version files, and a GitHub release with `machship-mcp.mcpb` attached.
+Releases run on push to `main` (semantic-release): `feat:`/`fix:` commits trigger a version bump, `yarn bundle`, npm publish (public), a git tag, and a GitHub release with `machship-mcp.mcpb` attached. The GitHub release notes are the changelog.
+
+The release never commits back to `main`: the org ruleset requires a pull request for every change to the default branch, with no bypass. CI writes the version into the version files before the build, so the published npm package, the bundle and the running server all carry the released version, while the files in the repo keep their last committed value. The git tags are the source of truth for versions.
 
 npm auth uses trusted publishing (OIDC): the release job runs on Node 24 (npm 11) with `id-token: write`, and the package has a trusted publisher for `devkindhq/machship-mcp` / `ci-semantic-release.yml`. No `NPM_TOKEN` secret should exist; a short-lived token was used only for the first publish. Do not add `@semantic-release/npm` or `@semantic-release/github` to `devDependencies` — semantic-release loads its own bundled copies first, so a separate copy is silently ignored.
 
