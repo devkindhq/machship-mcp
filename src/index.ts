@@ -17,42 +17,42 @@
  *   PORT                — (optional) HTTP port when TRANSPORT=http, default: 3000
  */
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { VERSION, SERVER_NAME } from "./utils/constants.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import express from "express";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { VERSION, SERVER_NAME } from './utils/constants.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import express from 'express';
 
-import { registerAuthenticateTools } from "./tools/authenticate.js";
-import { registerAttachmentsTools } from "./tools/attachments.js";
-import { registerCarrierInvoicesTools } from "./tools/carrier-invoices.js";
-import { registerCommercialInvoicesTools } from "./tools/commercial-invoices.js";
-import { registerCompaniesTools } from "./tools/companies.js";
-import { registerCompanyItemsTools } from "./tools/company-items.js";
-import { registerCompanyLocationsTools } from "./tools/company-locations.js";
-import { registerConsignmentsTools } from "./tools/consignments.js";
-import { registerConsolidationTools } from "./tools/consolidation.js";
-import { registerCustomSchemasTools } from "./tools/custom-schemas.js";
-import { registerFinancialInvoicesTools } from "./tools/financial-invoices.js";
-import { registerIdentitiesTools } from "./tools/identities.js";
-import { registerIdentityProvidersTools } from "./tools/identity-providers.js";
-import { registerLabelsTools } from "./tools/labels.js";
-import { registerLocationsTools } from "./tools/locations.js";
-import { registerManifestsTools } from "./tools/manifests.js";
-import { registerNotesTools } from "./tools/notes.js";
-import { registerOrganisationLinksTools } from "./tools/organisation-links.js";
-import { registerPendingConsignmentsTools } from "./tools/pending-consignments.js";
-import { registerQuotesTools } from "./tools/quotes.js";
-import { registerRoutesTools } from "./tools/routes.js";
+import { registerAuthenticateTools } from './tools/authenticate.js';
+import { registerAttachmentsTools } from './tools/attachments.js';
+import { registerCarrierInvoicesTools } from './tools/carrier-invoices.js';
+import { registerCommercialInvoicesTools } from './tools/commercial-invoices.js';
+import { registerCompaniesTools } from './tools/companies.js';
+import { registerCompanyItemsTools } from './tools/company-items.js';
+import { registerCompanyLocationsTools } from './tools/company-locations.js';
+import { registerConsignmentsTools } from './tools/consignments.js';
+import { registerConsolidationTools } from './tools/consolidation.js';
+import { registerCustomSchemasTools } from './tools/custom-schemas.js';
+import { registerFinancialInvoicesTools } from './tools/financial-invoices.js';
+import { registerIdentitiesTools } from './tools/identities.js';
+import { registerIdentityProvidersTools } from './tools/identity-providers.js';
+import { registerLabelsTools } from './tools/labels.js';
+import { registerLocationsTools } from './tools/locations.js';
+import { registerManifestsTools } from './tools/manifests.js';
+import { registerNotesTools } from './tools/notes.js';
+import { registerOrganisationLinksTools } from './tools/organisation-links.js';
+import { registerPendingConsignmentsTools } from './tools/pending-consignments.js';
+import { registerQuotesTools } from './tools/quotes.js';
+import { registerRoutesTools } from './tools/routes.js';
 
 function createServer(): McpServer {
-  const server = new McpServer(
-    {
-      name: SERVER_NAME,
-      version: VERSION,
-    },
-    {
-      instructions: `Tools for the Machship freight platform. Typical flow:
+	const server = new McpServer(
+		{
+			name: SERVER_NAME,
+			version: VERSION,
+		},
+		{
+			instructions: `Tools for the Machship freight platform. Typical flow:
 1. machship_get_companies to find the companyId; most tools need it.
 2. machship_search_locations to resolve suburbs/postcodes.
 3. machship_get_routes for live rates, or machship_create_quote to save a quote.
@@ -60,75 +60,77 @@ function createServer(): McpServer {
 5. Labels (prefer the *_file_info tools, which return base64 PDFs), then machship_manifest_consignments to dispatch to the carrier.
 6. machship_get_consignment_statuses to track.
 Notes: machship_update_identity overwrites omitted fields with null. machship_get_items_by_skus silently drops unknown SKUs. Text output is capped at 25,000 characters; full data is in structuredContent.`,
-    }
-  );
+		},
+	);
 
-  registerAuthenticateTools(server);
-  registerAttachmentsTools(server);
-  registerCarrierInvoicesTools(server);
-  registerCommercialInvoicesTools(server);
-  registerCompaniesTools(server);
-  registerCompanyItemsTools(server);
-  registerCompanyLocationsTools(server);
-  registerConsignmentsTools(server);
-  registerConsolidationTools(server);
-  registerCustomSchemasTools(server);
-  registerFinancialInvoicesTools(server);
-  registerIdentitiesTools(server);
-  registerIdentityProvidersTools(server);
-  registerLabelsTools(server);
-  registerLocationsTools(server);
-  registerManifestsTools(server);
-  registerNotesTools(server);
-  registerOrganisationLinksTools(server);
-  registerPendingConsignmentsTools(server);
-  registerQuotesTools(server);
-  registerRoutesTools(server);
+	registerAuthenticateTools(server);
+	registerAttachmentsTools(server);
+	registerCarrierInvoicesTools(server);
+	registerCommercialInvoicesTools(server);
+	registerCompaniesTools(server);
+	registerCompanyItemsTools(server);
+	registerCompanyLocationsTools(server);
+	registerConsignmentsTools(server);
+	registerConsolidationTools(server);
+	registerCustomSchemasTools(server);
+	registerFinancialInvoicesTools(server);
+	registerIdentitiesTools(server);
+	registerIdentityProvidersTools(server);
+	registerLabelsTools(server);
+	registerLocationsTools(server);
+	registerManifestsTools(server);
+	registerNotesTools(server);
+	registerOrganisationLinksTools(server);
+	registerPendingConsignmentsTools(server);
+	registerQuotesTools(server);
+	registerRoutesTools(server);
 
-  return server;
+	return server;
 }
 
 async function runStdio(): Promise<void> {
-  const server = createServer();
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("Machship MCP server running via stdio");
+	const server = createServer();
+	const transport = new StdioServerTransport();
+	await server.connect(transport);
+	console.error('Machship MCP server running via stdio');
 }
 
 async function runHTTP(): Promise<void> {
-  const app = express();
-  app.use(express.json());
+	const app = express();
+	app.use(express.json());
 
-  app.post("/mcp", async (req, res) => {
-    const server = createServer();
-    const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined,
-      enableJsonResponse: true
-    });
-    res.on("close", () => transport.close());
-    await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
-  });
+	app.post('/mcp', async (req, res) => {
+		const server = createServer();
+		const transport = new StreamableHTTPServerTransport({
+			sessionIdGenerator: undefined,
+			enableJsonResponse: true,
+		});
+		res.on('close', () => transport.close());
+		await server.connect(transport);
+		await transport.handleRequest(req, res, req.body);
+	});
 
-  app.get("/health", (_req, res) => {
-    res.json({ status: "ok", server: "machship-mcp-server" });
-  });
+	app.get('/health', (_req, res) => {
+		res.json({ status: 'ok', server: 'machship-mcp-server' });
+	});
 
-  const port = parseInt(process.env.PORT || "3000");
-  app.listen(port, () => {
-    console.error(`Machship MCP server running on http://localhost:${port}/mcp`);
-  });
+	const port = parseInt(process.env.PORT || '3000');
+	app.listen(port, () => {
+		console.error(
+			`Machship MCP server running on http://localhost:${port}/mcp`,
+		);
+	});
 }
 
-const transport = process.env.TRANSPORT || "stdio";
-if (transport === "http") {
-  runHTTP().catch((error: unknown) => {
-    console.error("Server error:", error);
-    process.exit(1);
-  });
+const transport = process.env.TRANSPORT || 'stdio';
+if (transport === 'http') {
+	runHTTP().catch((error: unknown) => {
+		console.error('Server error:', error);
+		process.exit(1);
+	});
 } else {
-  runStdio().catch((error: unknown) => {
-    console.error("Server error:", error);
-    process.exit(1);
-  });
+	runStdio().catch((error: unknown) => {
+		console.error('Server error:', error);
+		process.exit(1);
+	});
 }
