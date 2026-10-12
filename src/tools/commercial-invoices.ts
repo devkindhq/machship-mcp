@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { errorResponse, successResponse } from '../client.js';
+import {
+	errorResponse,
+	requireToken,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 import axios from 'axios';
 import FormData from 'form-data';
 import { API_BASE_URL } from '../constants.js';
@@ -38,6 +43,7 @@ Args:
 						.describe('Invoice files to upload'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -47,11 +53,7 @@ Args:
 		},
 		async ({ consignmentId, files }) => {
 			try {
-				const token = process.env.MACHSHIP_API_TOKEN;
-				if (!token)
-					throw new Error(
-						'MACHSHIP_API_TOKEN environment variable is required',
-					);
+				const token = requireToken();
 
 				const form = new FormData();
 				for (const f of files) {

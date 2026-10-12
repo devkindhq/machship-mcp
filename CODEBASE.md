@@ -23,7 +23,7 @@ Transport mode is chosen via `TRANSPORT`:
 ### Configuration Variables
 | Variable | Default | Purpose |
 | :--- | :--- | :--- |
-| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip API token, sent in the `token` header. Deferred verification allows metadata listing without a token. |
+| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip API token, sent in the `token` header. Deferred verification allows metadata listing without a token. Optional in the MCPB `user_config` (Smithery "Optional config" check); `requireToken()` in `src/client.ts` returns a clear error on each call without it. |
 | `MACHSHIP_API_URL` | `https://live.machship.com` | Base API URL. Target `https://sandbox-api.machship.com` for testing. *Never use `MACHSHIP_BASE_URL` (ignored).* |
 | `TRANSPORT` | `stdio` | `stdio` or `http`. |
 | `PORT` | `3000` | HTTP listening port when `TRANSPORT=http`. |
@@ -78,6 +78,7 @@ server.registerTool(
       companyId: z.number().int().positive().describe("Company identifier"),
       includeDeleted: z.boolean().optional().describe("Include soft-deleted records")
     }).strict(),
+    outputSchema: resultSchema,
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
@@ -103,6 +104,8 @@ server.registerTool(
 4. **Boolean Naming:** Prefix booleans with verbs (`includeChildCompanies`, `printA4`, `returnPdfFileBytes`).
 5. **Arrays:** Use plural identifiers (`ids`, `references`, `files`, `skus`).
 6. **Annotations:** Set `readOnlyHint: true` on queries, `destructiveHint: true` on deletions.
+7. **Tool Naming stays snake_case:** Smithery's "Naming" check rewards dot notation (`machship.get_x`), but several clients only accept `[a-zA-Z0-9_-]` and a rename breaks existing connections. Keep the names; that check stays unmet on purpose.
+8. **Output Schema:** Always set `outputSchema: resultSchema` (from `src/client.ts`) and return through `successResponse` / `errorResponse`. The SDK validates every successful result against the output schema, so `successResponse` always returns an object: the Machship envelope `{ object, errors }` as-is, any other payload (arrays, file bytes) as `{ object }`. Smithery's quality score counts output schemas per tool.
 
 ---
 

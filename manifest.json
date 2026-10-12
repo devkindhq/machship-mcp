@@ -40,8 +40,8 @@
 		"machship_api_token": {
 			"type": "string",
 			"title": "Machship API Token",
-			"description": "Your Machship API token (Settings → API → Generate token)",
-			"required": true,
+			"description": "Needed for every tool call. Your Machship API token (Settings → API → Generate token)",
+			"required": false,
 			"sensitive": true
 		},
 		"machship_api_url": {

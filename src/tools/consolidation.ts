@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerConsolidationTools(server: McpServer): void {
 	server.registerTool(
@@ -19,6 +24,7 @@ Args:
 						.describe('Consolidation grouping options'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -55,6 +61,7 @@ Args:
 						.describe('Consolidation request payload'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -90,6 +97,7 @@ Args:
 						.describe('Consolidation options'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,

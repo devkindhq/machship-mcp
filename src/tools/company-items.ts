@@ -1,10 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import {
+	apiDelete,
 	apiGet,
 	apiPost,
-	apiDelete,
 	errorResponse,
+	resultSchema,
 	successResponse,
 } from '../client.js';
 
@@ -22,6 +23,7 @@ Args:
 					id: z.number().int().positive().describe('Item ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -71,6 +73,7 @@ Args:
 						.describe('Items to retrieve (max 200)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -110,6 +113,7 @@ Args:
 					sku: z.string().min(1).describe('Product SKU'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -143,6 +147,7 @@ Args:
 					id: z.number().int().positive().describe('Item ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -194,6 +199,7 @@ Args:
 						.describe('Items to retrieve (max 200)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -233,6 +239,7 @@ Args:
 					sku: z.string().min(1).describe('Product SKU'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -276,6 +283,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -314,6 +322,7 @@ Args:
 						.describe('Company item ID to delete'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: true,
@@ -357,6 +366,7 @@ Args:
 						.describe('SKU codes to look up (max 100)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

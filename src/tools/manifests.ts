@@ -4,8 +4,9 @@ import {
 	apiGet,
 	apiPost,
 	errorResponse,
-	successResponse,
 	ResponseFormat,
+	resultSchema,
+	successResponse,
 } from '../client.js';
 
 export function registerManifestsTools(server: McpServer): void {
@@ -83,6 +84,7 @@ Examples:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -120,6 +122,7 @@ Args:
 						.describe('Company ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -156,6 +159,7 @@ Args:
 						.describe('Consignment IDs to group'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -195,6 +199,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -232,6 +237,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,

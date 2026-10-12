@@ -4,8 +4,9 @@ import {
 	apiGet,
 	apiPost,
 	errorResponse,
-	successResponse,
 	ResponseFormat,
+	resultSchema,
+	successResponse,
 } from '../client.js';
 
 export function registerQuotesTools(server: McpServer): void {
@@ -40,6 +41,7 @@ Examples:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -81,6 +83,7 @@ Examples:
 						.describe('Quote request with complexItems array'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -137,6 +140,7 @@ Error Handling:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -183,6 +187,7 @@ Examples:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

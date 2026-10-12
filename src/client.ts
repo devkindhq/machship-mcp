@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
+import { z } from 'zod';
 import { API_BASE_URL, CHARACTER_LIMIT } from './constants.js';
 
 export const ResponseFormat = {
@@ -14,15 +15,36 @@ type McpToolResult = {
 	structuredContent?: Record<string, unknown>;
 };
 
-function getAuthHeaders(): Record<string, string> {
+/**
+ * Output schema shared by every tool. Machship wraps responses as
+ * `{ object, errors }`; successResponse wraps any other payload as `{ object }`.
+ */
+export const resultSchema = z
+	.object({
+		object: z.unknown().describe('Response payload from the Machship API'),
+		errors: z
+			.array(z.unknown())
+			.nullish()
+			.describe('Validation errors returned by Machship, if any'),
+	})
+	.passthrough();
+
+/** The token is optional at install time, so every call checks it here. */
+export function requireToken(): string {
 	const token = process.env.MACHSHIP_API_TOKEN;
 	if (!token) {
-		throw new Error('MACHSHIP_API_TOKEN environment variable is required');
+		throw new Error(
+			'Machship API token is not set. Add it in the server settings (machship_api_token) or set the MACHSHIP_API_TOKEN environment variable.',
+		);
 	}
+	return token;
+}
+
+function getAuthHeaders(): Record<string, string> {
 	return {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',
-		token: token,
+		token: requireToken(),
 	};
 }
 
@@ -123,9 +145,14 @@ export function successResponse(
 		format === ResponseFormat.MARKDOWN
 			? toMarkdown(data)
 			: truncate(JSON.stringify(data, null, 2));
+	// structuredContent must be an object (MCP spec and resultSchema).
+	const isRecord =
+		typeof data === 'object' && data !== null && !Array.isArray(data);
 	return {
 		content: [{ type: 'text' as const, text }],
-		structuredContent: data as Record<string, unknown>,
+		structuredContent: isRecord
+			? (data as Record<string, unknown>)
+			: { object: data },
 	};
 }
 
