@@ -446,6 +446,16 @@ yarn bundle   # build + sync manifest tools + pack machship-mcp.mcpb
 - `scripts/build-mcpb.js` packs a staging copy with production dependencies only, then runs `mcpb validate` and `mcpb pack`.
 - Smithery reads listing data from the bundle `manifest.json`; `smithery.yaml` is not used.
 
+### Publishing to Smithery (manual, after each release)
+```bash
+node scripts/publish-smithery.js v1.2.3 --dry-run   # prepare and check only
+node scripts/publish-smithery.js v1.2.3             # publish
+```
+- Smithery copies `manifest.json` `tools` into its listing and needs full MCP tool definitions (`inputSchema`, `outputSchema`, `title`, `annotations`). The strict MCPB schema allows only `name` and `description`, so `mcpb validate` and `mcpb pack` reject a manifest with them.
+- The script therefore downloads the release bundle (`gh release download`), starts its server without a token, writes the full `tools/list` output into a copy of `manifest.json`, rebuilds the archive with only that file changed (`fflate`), checks the rebuilt bundle starts with the same tools, then runs `smithery mcp publish`. The GitHub release and npm package stay unchanged.
+- `--bundle <file.mcpb>` publishes a local build instead of a release (no tag check). Use only when a release is not possible: Smithery then runs code that npm does not have.
+- Needs `gh` and `smithery` logged in on the machine that runs it. It is not run in CI: Smithery has no OIDC, and a stored Smithery API key could publish to the `devkind` namespace.
+
 ### Version Bumping & Releases
 Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json` (both version fields), and `manifest.json`.
 
