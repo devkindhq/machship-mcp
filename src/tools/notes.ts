@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerNotesTools(server: McpServer): void {
 	server.registerTool(
@@ -16,6 +21,7 @@ Args:
 					id: z.number().int().positive().describe('Consignment ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

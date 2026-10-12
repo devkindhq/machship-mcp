@@ -1,6 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerCarrierInvoicesTools(server: McpServer): void {
 	server.registerTool(
@@ -40,6 +46,7 @@ Args:
 						.describe('Filter by invoice ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -82,6 +89,7 @@ Args:
 						.describe('Filter by entry status'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -118,6 +126,7 @@ Args:
 						.describe('Repricing request payload'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -153,6 +162,7 @@ Args:
 						.describe('Reconciliation request payload'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,

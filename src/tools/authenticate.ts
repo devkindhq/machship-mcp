@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerAuthenticateTools(server: McpServer): void {
 	server.registerTool(
@@ -12,6 +17,7 @@ Use this to verify authentication is working and to get the current user/company
 
 Returns: session info including user details, company ID, and permissions.`,
 			inputSchema: z.object({}).strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

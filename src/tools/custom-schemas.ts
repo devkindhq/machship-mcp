@@ -1,6 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerCustomSchemasTools(server: McpServer): void {
 	server.registerTool(
@@ -10,6 +16,7 @@ export function registerCustomSchemasTools(server: McpServer): void {
 			description: `Returns all custom schemas defined in the Machship organisation.
 Custom schemas extend Machship entities with additional fields.`,
 			inputSchema: z.object({}).strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -43,6 +50,7 @@ Args:
 						.describe('DotNet class ID of the schema'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -82,6 +90,7 @@ Args:
 						.describe('JSON schema definition'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -120,6 +129,7 @@ Args:
 						.describe('Updated JSON schema definition'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -154,6 +164,7 @@ Args:
 					id: z.string().min(1).describe('DotNet class ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: true,

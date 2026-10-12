@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerIdentityProvidersTools(server: McpServer): void {
 	server.registerTool(
@@ -20,6 +25,7 @@ Args:
 						.describe('Identity provider ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -57,6 +63,7 @@ Args:
 						.describe('Company ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -83,6 +90,7 @@ Args:
 			title: 'Get Identity Providers for Logged-in User',
 			description: `Returns all identity providers for the current user's organisation. No parameters required.`,
 			inputSchema: z.object({}).strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -120,6 +128,7 @@ Args:
 						.describe('Organisation ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

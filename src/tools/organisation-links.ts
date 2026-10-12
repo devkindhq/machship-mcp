@@ -1,6 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerOrganisationLinksTools(server: McpServer): void {
 	server.registerTool(
@@ -23,6 +29,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -76,6 +83,7 @@ Args:
 						.describe('Filter results by organisation name'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -129,6 +137,7 @@ Args:
 						.describe('Filter results by organisation name'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -167,6 +176,7 @@ Args:
 						.describe('Organisation ID (optional)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -204,6 +214,7 @@ Args:
 						.describe('Organisation public key'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -241,6 +252,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -276,6 +288,7 @@ Args:
 						.describe('Unlink request (organisationLinkId)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: true,
@@ -314,6 +327,7 @@ Args:
 						.describe('Organisation ID (optional)'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,

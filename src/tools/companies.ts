@@ -3,8 +3,9 @@ import { z } from 'zod';
 import {
 	apiGet,
 	errorResponse,
-	successResponse,
 	ResponseFormat,
+	resultSchema,
+	successResponse,
 } from '../client.js';
 
 export function registerCompaniesTools(server: McpServer): void {
@@ -53,6 +54,7 @@ Error Handling:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -116,6 +118,7 @@ Examples:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

@@ -4,8 +4,9 @@ import {
 	apiGet,
 	apiPost,
 	errorResponse,
-	successResponse,
 	ResponseFormat,
+	resultSchema,
+	successResponse,
 } from '../client.js';
 
 export function registerLocationsTools(server: McpServer): void {
@@ -43,6 +44,7 @@ Examples:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -85,6 +87,7 @@ Args:
 						.describe('Suburb/postcode pairs for exact matching'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -123,6 +126,7 @@ Args:
 						.describe('Additional location search options'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerRoutesTools(server: McpServer): void {
 	server.registerTool(
@@ -34,6 +39,7 @@ Example:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -71,6 +77,7 @@ Args:
 						.describe('Array of route requests'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -108,6 +115,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

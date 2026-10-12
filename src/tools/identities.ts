@@ -1,6 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerIdentitiesTools(server: McpServer): void {
 	server.registerTool(
@@ -33,6 +39,7 @@ Args:
 						.describe('Filter by identity provider ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -66,6 +73,7 @@ Args:
 					id: z.number().int().positive().describe('Identity ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -103,6 +111,7 @@ Args:
 						.describe('Company ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -231,6 +240,7 @@ Args:
 						.describe('Identities to create'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -298,6 +308,7 @@ Args:
 						.describe('Additional notes about the identity'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -334,6 +345,7 @@ Args:
 						.describe('Identity IDs to delete'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: true,
@@ -370,6 +382,7 @@ Args:
 						.describe('Identity IDs to disable'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -406,6 +419,7 @@ Args:
 						.describe('Identity IDs to re-enable'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -460,6 +474,7 @@ Args:
 						.describe('Identity-company links to create'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -511,6 +526,7 @@ Args:
 						.describe('Identity-company pairs to unlink'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -549,6 +565,7 @@ Args:
 						.describe('Identity IDs'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

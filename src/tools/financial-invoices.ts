@@ -1,6 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerFinancialInvoicesTools(server: McpServer): void {
 	server.registerTool(
@@ -43,6 +48,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -84,6 +90,7 @@ Args:
 						.describe('Include PDF as base64 bytes'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,

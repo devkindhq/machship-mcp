@@ -1,6 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { apiGet, apiPost, errorResponse, successResponse } from '../client.js';
+import {
+	apiGet,
+	apiPost,
+	errorResponse,
+	resultSchema,
+	successResponse,
+} from '../client.js';
 
 export function registerCompanyLocationsTools(server: McpServer): void {
 	server.registerTool(
@@ -20,6 +26,7 @@ Args:
 						.describe('Company location ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -57,6 +64,7 @@ Args:
 						.describe('Company ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -94,6 +102,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -129,6 +138,7 @@ Args:
 						.describe('Updated location data including id'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
@@ -166,6 +176,7 @@ Args:
 						.describe('Company location ID'),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
@@ -203,6 +214,7 @@ Args:
 						),
 				})
 				.strict(),
+			outputSchema: resultSchema,
 			annotations: {
 				readOnlyHint: false,
 				destructiveHint: false,
