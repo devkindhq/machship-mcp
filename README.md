@@ -54,7 +54,7 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 
 1. Log into your Machship account
 2. Go to **Settings → API**
-3. Generate a Bearer token — this is your `MACHSHIP_API_TOKEN`
+3. Generate an API token — this is your `MACHSHIP_API_TOKEN`
 
 **Step 2 — Add to your MCP client** (pick one below)
 
@@ -68,7 +68,10 @@ A Model Context Protocol server that integrates AI assistants with the [Machship
 
 ### Claude Desktop
 
-Edit `~/.claude/claude_desktop_config.json` (create it if it doesn't exist):
+Open **Settings → Developer → Edit Config**, or edit the file directly (create it if it doesn't exist):
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -88,40 +91,20 @@ Restart Claude Desktop — the Machship tools will appear automatically.
 
 ### Claude Code (CLI)
 
-Run once to add to your project MCP config:
-
 ```bash
-claude mcp add machship -- npx -y @devkind/machship-mcp
+# Prompts for the token without echoing it or saving it to shell history
+read -rs MACHSHIP_API_TOKEN
+claude mcp add --scope local machship -e MACHSHIP_API_TOKEN="$MACHSHIP_API_TOKEN" -- npx -y @devkind/machship-mcp
 ```
 
-Then set the token in your environment or `.env`:
-
-```bash
-export MACHSHIP_API_TOKEN=your-token-here
-```
-
-Or add it directly to `.mcp.json` after running the command above:
-
-```json
-{
-  "mcpServers": {
-    "machship": {
-      "command": "npx",
-      "args": ["-y", "@devkind/machship-mcp"],
-      "env": {
-        "MACHSHIP_API_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
+`--scope local` stores the token in your user config (`~/.claude.json`), outside the repository. Never put the token in a project `.mcp.json` — that file is meant to be committed.
 
 <details>
 <summary>Cursor</summary>
 
 #### One-click install:
 
-[<img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor">](https://cursor.com/en/install-mcp?name=Machship%20MCP&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1hY2hzaGlwLW1jcCJdLCJlbnYiOnsiTUFDSFNISVBfQVBJX1RPS0VOIjoieW91ci10b2tlbi1oZXJlIn19)
+[<img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor">](https://cursor.com/en/install-mcp?name=Machship%20MCP&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBkZXZraW5kL21hY2hzaGlwLW1jcCJdLCJlbnYiOnsiTUFDSFNISVBfQVBJX1RPS0VOIjoieW91ci10b2tlbi1oZXJlIn19)
 
 #### Manual setup:
 
@@ -250,7 +233,7 @@ MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y @devkind/machship-mcp
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `MACHSHIP_API_TOKEN` | Yes | — | Machship Bearer token |
+| `MACHSHIP_API_TOKEN` | Yes | — | Machship API token (sent in the `token` header) |
 | `MACHSHIP_API_URL` | No | `https://live.machship.com` | Override API base URL |
 | `TRANSPORT` | No | `stdio` | `stdio` or `http` |
 | `PORT` | No | `3000` | HTTP port (when `TRANSPORT=http`) |
@@ -276,7 +259,7 @@ Once connected, ask your AI assistant:
 | `stdio` (default) | AI desktop clients (Claude Desktop, Cursor, VS Code, etc.) — JSON-RPC over stdin/stdout |
 | `http` | Web integrations, remote servers, or anything that needs an HTTP MCP endpoint |
 
-Set the mode via the `TRANSPORT` environment variable (see [Environment Variables](#environment-variables) below).
+Set the mode via the `TRANSPORT` environment variable (see [Environment Variables](#environment-variables) above).
 
 ## Docker
 
@@ -308,6 +291,10 @@ For stdio mode in MCP clients:
 
 ### Quick Start
 
+This repository uses Yarn 1 only (`yarn.lock`). Do not run `npm install`.
+
+Development needs Node.js 22.14+ or 24.10+ (required by the release tooling). Running the published server needs only Node.js 18+.
+
 ```bash
 # Clone and install
 git clone https://github.com/devkindhq/machship-mcp.git
@@ -334,6 +321,9 @@ yarn build                  # Compile TypeScript to dist/
 yarn dev                    # Watch mode with tsx
 yarn start                  # Run compiled server
 yarn clean                  # Remove dist/
+yarn lint                   # ESLint + Prettier check on src/
+yarn format                 # Format src/ with Prettier
+yarn bundle                 # Build machship-mcp.mcpb (MCPB bundle for Smithery)
 
 # Docker
 yarn docker:build           # Build image as devkind/machship-mcp:latest

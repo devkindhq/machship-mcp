@@ -54,7 +54,8 @@ const versionFiles = [
 	},
 	{
 		path: path.join(rootDir, 'server.json'),
-		pattern: /"version": "([^"]*)"/,
+		// Global: the server version and packages[].version must both move.
+		pattern: /"version": "([^"]*)"/g,
 		replacement: (match, cur) => match.replace(cur, newVersion),
 	},
 	{
@@ -72,14 +73,16 @@ function updateFile({ path: filePath, pattern, replacement, optional = false }) 
 	}
 
 	const content = fs.readFileSync(filePath, 'utf8');
-	const match = content.match(pattern);
-	if (!match) {
+	const matches = pattern.global
+		? [...content.matchAll(pattern)]
+		: [pattern.exec(content)].filter(Boolean);
+	if (!matches.length) {
 		console.warn(`Warning: version pattern not found in ${filePath}`);
 		return;
 	}
 
-	const current = match[1];
-	if (current === newVersion) {
+	const current = matches[0][1];
+	if (matches.every((m) => m[1] === newVersion)) {
 		log(`Already at ${newVersion}: ${path.basename(filePath)}`, true);
 		return;
 	}

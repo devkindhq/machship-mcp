@@ -13,6 +13,7 @@
 		"url": "https://github.com/devkindhq/machship-mcp"
 	},
 	"homepage": "https://github.com/devkindhq/machship-mcp#readme",
+	"icon": "assets/icon.png",
 	"license": "ISC",
 	"keywords": [
 		"mcp",
@@ -31,9 +32,7 @@
 			],
 			"env": {
 				"MACHSHIP_API_TOKEN": "${user_config.machship_api_token}",
-				"MACHSHIP_API_URL": "${user_config.machship_api_url}",
-				"TRANSPORT": "${user_config.transport}",
-				"PORT": "${user_config.port}"
+				"MACHSHIP_API_URL": "${user_config.machship_api_url}"
 			}
 		}
 	},
@@ -41,7 +40,7 @@
 		"machship_api_token": {
 			"type": "string",
 			"title": "Machship API Token",
-			"description": "Your Machship Bearer token (Settings → API → Generate token)",
+			"description": "Your Machship API token (Settings → API → Generate token)",
 			"required": true,
 			"sensitive": true
 		},
@@ -51,20 +50,508 @@
 			"description": "Override the Machship API base URL (default: https://live.machship.com)",
 			"required": false,
 			"default": "https://live.machship.com"
-		},
-		"transport": {
-			"type": "string",
-			"title": "Transport Mode",
-			"description": "How the server communicates: 'stdio' for AI desktop clients (default), 'http' for web integrations",
-			"required": false,
-			"default": "stdio"
-		},
-		"port": {
-			"type": "number",
-			"title": "HTTP Port",
-			"description": "Port for HTTP transport mode (default: 3000, only used when Transport Mode is 'http')",
-			"required": false,
-			"default": 3000
 		}
-	}
+	},
+	"tools": [
+		{
+			"name": "machship_ping",
+			"description": "Determines the current user's login status and retrieves session properties from Machship.\nUse this to verify authentication is working and to get the current user/company context."
+		},
+		{
+			"name": "machship_get_attachment",
+			"description": "Downloads raw attachment file bytes from Machship by attachment ID.\nReturns base64-encoded file content."
+		},
+		{
+			"name": "machship_get_attachment_pod_report",
+			"description": "Downloads a Proof of Delivery (POD) report that includes attachment and consignment details."
+		},
+		{
+			"name": "machship_get_attachments_by_consignment_ids",
+			"description": "Downloads attachments for up to 40 consignments in bulk (returned as zip)."
+		},
+		{
+			"name": "machship_upload_attachments",
+			"description": "Uploads one or more attachments to Machship."
+		},
+		{
+			"name": "machship_get_carrier_invoices",
+			"description": "Returns basic carrier invoice information (max 100 records per call)."
+		},
+		{
+			"name": "machship_get_carrier_invoice_entries",
+			"description": "Gets carrier invoice line entries with optional status filtering."
+		},
+		{
+			"name": "machship_update_reprice_consignment",
+			"description": "Updates consignment items on a carrier invoice entry and triggers repricing.\nUse for reconciling carrier invoice discrepancies."
+		},
+		{
+			"name": "machship_attempt_auto_reconciliation",
+			"description": "Attempts automatic reconciliation of carrier invoices based on configured carrier thresholds."
+		},
+		{
+			"name": "machship_upload_commercial_invoice",
+			"description": "Uploads one or more commercial invoice files for a consignment (for international shipments).\nFiles are provided as base64-encoded content."
+		},
+		{
+			"name": "machship_get_companies",
+			"description": "Returns all companies accessible to the authenticated user."
+		},
+		{
+			"name": "machship_get_company_carriers",
+			"description": "Returns all available carriers, carrier accounts, and freight services for a company.\nCall this before creating consignments or quotes to discover which services and accounts are available."
+		},
+		{
+			"name": "machship_get_item",
+			"description": "Returns a single saved item (product/SKU) with its dimensions by ID."
+		},
+		{
+			"name": "machship_get_items",
+			"description": "Returns a paginated list of saved items for a company (max 200 per request)."
+		},
+		{
+			"name": "machship_get_item_by_sku",
+			"description": "Returns a saved item matching the given SKU for a company."
+		},
+		{
+			"name": "machship_get_item_complex",
+			"description": "Returns a single complex item (with detailed dimensions/packaging data) by ID."
+		},
+		{
+			"name": "machship_get_items_complex",
+			"description": "Returns a paginated list of complex items for a company (max 200 per request)."
+		},
+		{
+			"name": "machship_get_item_complex_by_sku",
+			"description": "Returns a complex item (detailed dimensions) by SKU for a company."
+		},
+		{
+			"name": "machship_create_item_complex",
+			"description": "Creates a new complex item (product/SKU with detailed packaging info) for a company."
+		},
+		{
+			"name": "machship_delete_item",
+			"description": "Deletes a saved item from a company. This action is irreversible."
+		},
+		{
+			"name": "machship_get_items_by_skus",
+			"description": "Returns a list of saved items matching any of the supplied SKUs (standard items only, max 100 SKUs).\nSKUs that don't match any item are silently omitted — compare returned Sku values against your input to detect misses."
+		},
+		{
+			"name": "machship_get_company_location",
+			"description": "Returns details for a single company location (warehouse, store, depot)."
+		},
+		{
+			"name": "machship_get_company_locations",
+			"description": "Returns all locations (warehouses, stores, depots) for a given company."
+		},
+		{
+			"name": "machship_create_company_location",
+			"description": "Creates a new company location (warehouse, store, depot pickup point)."
+		},
+		{
+			"name": "machship_edit_company_location",
+			"description": "Edits an existing company location."
+		},
+		{
+			"name": "machship_get_permanent_pickups",
+			"description": "Gets all permanent scheduled pickups configured for a company location."
+		},
+		{
+			"name": "machship_add_permanent_pickups",
+			"description": "Adds permanent scheduled pickups to a company location."
+		},
+		{
+			"name": "machship_get_consignment",
+			"description": "Returns full details for a single consignment by ID."
+		},
+		{
+			"name": "machship_get_consignments_by_ids",
+			"description": "Returns details for multiple consignments by their IDs (max 100 per request)."
+		},
+		{
+			"name": "machship_get_consignments_by_reference1",
+			"description": "Finds consignments by their Reference 1 field (order number, etc). Max 10 per request."
+		},
+		{
+			"name": "machship_get_consignments_by_reference2",
+			"description": "Finds consignments by their Reference 2 field. Max 10 per request."
+		},
+		{
+			"name": "machship_get_consignments_by_carrier_id",
+			"description": "Finds consignments by carrier's own consignment/tracking ID. Max 10 per request."
+		},
+		{
+			"name": "machship_get_consignment_statuses",
+			"description": "Returns tracking/delivery statuses for a batch of consignments, with optional date filter."
+		},
+		{
+			"name": "machship_update_consignment_statuses",
+			"description": "Manually updates tracking statuses for consignments (e.g. mark as delivered)."
+		},
+		{
+			"name": "machship_get_unmanifested_consignments",
+			"description": "Returns consignments that have been created but not yet manifested (booked with carrier)."
+		},
+		{
+			"name": "machship_get_active_consignments",
+			"description": "Returns all active (in-transit) consignments for a company."
+		},
+		{
+			"name": "machship_get_all_consignments",
+			"description": "Returns all consignments for a company with date range and status filtering."
+		},
+		{
+			"name": "machship_get_recent_consignments",
+			"description": "Returns consignments created or updated within a UTC date range. Ideal for sync/polling workflows."
+		},
+		{
+			"name": "machship_get_completed_consignments",
+			"description": "Returns completed (delivered) consignments within a date range (max 2000 results)."
+		},
+		{
+			"name": "machship_create_consignment",
+			"description": "Creates a new unmanifested consignment in Machship. This is the core operation for booking freight."
+		},
+		{
+			"name": "machship_create_consignment_with_complex_items",
+			"description": "Creates a consignment using complex item definitions (with detailed packaging/dangerous goods data)."
+		},
+		{
+			"name": "machship_create_consignment_existing_items",
+			"description": "Creates a consignment using previously saved company items (by item ID / SKU)."
+		},
+		{
+			"name": "machship_edit_consignment",
+			"description": "Edits an existing unmanifested (not yet booked) consignment. Cannot edit manifested consignments."
+		},
+		{
+			"name": "machship_delete_consignments",
+			"description": "Deletes multiple unmanifested consignments. Cannot delete manifested consignments."
+		},
+		{
+			"name": "machship_search_consignments",
+			"description": "Searches consignments by reference numbers (Reference 1, Reference 2, or carrier IDs)."
+		},
+		{
+			"name": "machship_get_consignment_creation_settings",
+			"description": "Returns settings and defaults needed for creating consignments for a company (required fields, defaults, etc.)."
+		},
+		{
+			"name": "machship_get_consignment_attachments",
+			"description": "Returns attachment metadata (not file contents) for a consignment."
+		},
+		{
+			"name": "machship_update_despatch_dates",
+			"description": "Updates despatch dates and estimated time of arrival (ETA) for a set of consignments."
+		},
+		{
+			"name": "machship_get_consignment_by_pending_id",
+			"description": "Get consignment details (if it exists) using a pending consignment ID that has been transformed (linked) into a consignment."
+		},
+		{
+			"name": "machship_get_consignment_for_clone",
+			"description": "Get the details of an existing consignment in a format that can be passed directly to the createConsignmentWithComplexItems endpoint to create a copy."
+		},
+		{
+			"name": "machship_get_unmanifested_consignment_for_edit",
+			"description": "Get an unmanifested consignment in the same format required to perform an update via the editUnmanifestedConsignment endpoint."
+		},
+		{
+			"name": "machship_get_consignments_by_pending_ids",
+			"description": "Get consignment details for multiple consignments using Pending Consignment IDs as the lookup. Maximum of 100 consignments per request."
+		},
+		{
+			"name": "machship_group_consignments_for_consolidation",
+			"description": "Automatically groups consignments into consolidation groups based on options (carrier, route, etc.).\nReturns groups without actually consolidating — preview step before consolidation."
+		},
+		{
+			"name": "machship_perform_consolidation",
+			"description": "Consolidates a set of consignments into consolidated shipments.\nThis merges multiple consignments into fewer shipment units for carrier efficiency."
+		},
+		{
+			"name": "machship_group_and_perform_consolidation",
+			"description": "Groups and consolidates consignments in a single operation (combines grouping + performing)."
+		},
+		{
+			"name": "machship_get_custom_schemas",
+			"description": "Returns all custom schemas defined in the Machship organisation.\nCustom schemas extend Machship entities with additional fields."
+		},
+		{
+			"name": "machship_get_custom_schema",
+			"description": "Returns a specific custom schema by its DotNet class ID."
+		},
+		{
+			"name": "machship_create_custom_schema",
+			"description": "Creates a new custom schema to extend Machship entities with additional fields."
+		},
+		{
+			"name": "machship_update_custom_schema",
+			"description": "Updates an existing custom schema by its DotNet class ID."
+		},
+		{
+			"name": "machship_delete_custom_schema",
+			"description": "Deletes a custom schema by its DotNet class ID. This is irreversible."
+		},
+		{
+			"name": "machship_get_posted_invoices",
+			"description": "Returns posted financial invoices within an optional date range (max 100 per call)."
+		},
+		{
+			"name": "machship_get_invoice_by_document_number",
+			"description": "Returns a specific financial invoice by document number, with optional PDF download."
+		},
+		{
+			"name": "machship_get_identities",
+			"description": "Get all identities owned by an organisation, with details on which companies they are linked to.\nRequires administrator access to the organisation."
+		},
+		{
+			"name": "machship_get_identity",
+			"description": "Get the identity with the given ID."
+		},
+		{
+			"name": "machship_get_available_roles",
+			"description": "Get all roles that are available to assign to users of a certain company."
+		},
+		{
+			"name": "machship_create_identities",
+			"description": "Create identities in MachShip and assign companies and roles. All identities must belong to the same identityProvider and organisation.\nRequires administrator access."
+		},
+		{
+			"name": "machship_update_identity",
+			"description": "Updates properties on an identity. All fields except password are required; omitted fields are set to null."
+		},
+		{
+			"name": "machship_delete_identities",
+			"description": "Delete the identities with the given IDs. This action is irreversible."
+		},
+		{
+			"name": "machship_disable_identities",
+			"description": "Disable the identities with the given IDs, preventing them from logging in."
+		},
+		{
+			"name": "machship_reenable_identities",
+			"description": "Re-enable previously disabled identities, restoring login access."
+		},
+		{
+			"name": "machship_link_identities_to_companies",
+			"description": "Assign companies and roles to identities to give them access to the system.\nRequires administrator access."
+		},
+		{
+			"name": "machship_unlink_identities_from_companies",
+			"description": "Remove company access from identities. Each entry specifies an identity and the company to revoke access from."
+		},
+		{
+			"name": "machship_return_identity_public_keys",
+			"description": "Get the public keys of the supplied identities. These keys can be used by a linked organisation to grant\nthose identities access to companies in their organisation.\nRequires administrator access."
+		},
+		{
+			"name": "machship_get_identity_provider",
+			"description": "Get a specific identity provider by ID."
+		},
+		{
+			"name": "machship_get_identity_providers_for_company",
+			"description": "Get all identity providers associated with a specific company."
+		},
+		{
+			"name": "machship_get_identity_providers_for_logged_user",
+			"description": "Returns all identity providers for the current user's organisation. No parameters required."
+		},
+		{
+			"name": "machship_get_identity_providers_for_organisation",
+			"description": "Returns all identity providers for the specified organisation."
+		},
+		{
+			"name": "machship_get_consignment_label_pdf",
+			"description": "Returns the consignment label as a PDF (base64 or file bytes)."
+		},
+		{
+			"name": "machship_get_item_label_pdf",
+			"description": "Returns item/package labels for a consignment as a PDF."
+		},
+		{
+			"name": "machship_get_item_labels_zip",
+			"description": "Gets item labels as a zip file for up to 40 consignments."
+		},
+		{
+			"name": "machship_get_manifest_label_pdf",
+			"description": "Returns the manifest document as a PDF by manifest ID."
+		},
+		{
+			"name": "machship_get_manifest_label_pdf_by_consignment",
+			"description": "Returns the manifest PDF for the manifest associated with a given consignment."
+		},
+		{
+			"name": "machship_get_commercial_invoice_pdf",
+			"description": "Returns the commercial invoice PDF for a consignment (used for international shipments)."
+		},
+		{
+			"name": "machship_get_dangerous_goods_pdf",
+			"description": "Returns the dangerous goods declaration document PDF for a consignment."
+		},
+		{
+			"name": "machship_send_labels_to_printer",
+			"description": "Sends labels directly to a configured printer in Machship."
+		},
+		{
+			"name": "machship_group_consignments_for_printing",
+			"description": "Groups consignments for batch label printing and returns print groups."
+		},
+		{
+			"name": "machship_get_consignment_pdf_file_info",
+			"description": "Returns file metadata (name, size, URL) for the consignment label PDF without downloading it."
+		},
+		{
+			"name": "machship_get_item_pdf_file_info",
+			"description": "Returns file metadata for the item/package label PDF without downloading it."
+		},
+		{
+			"name": "machship_get_manifest_pdf_file_info",
+			"description": "Returns file metadata for the manifest PDF without downloading it."
+		},
+		{
+			"name": "machship_get_dangerous_goods_pdf_file_info",
+			"description": "Returns file metadata for the dangerous goods declaration PDF without downloading it."
+		},
+		{
+			"name": "machship_get_mo41_document_pdf",
+			"description": "Returns the MO41 document PDF for a consignment (used for specific carrier compliance documents)."
+		},
+		{
+			"name": "machship_get_mo41_document_pdf_file_info",
+			"description": "Returns file metadata for the MO41 document PDF without downloading it."
+		},
+		{
+			"name": "machship_get_special_instructions_pdf",
+			"description": "Returns the special instructions document PDF for a consignment."
+		},
+		{
+			"name": "machship_return_item_pdfs_for_consignments",
+			"description": "Returns item labels as a zip for up to 40 consignments (POST variant — use this when passing a body payload is preferred over query string)."
+		},
+		{
+			"name": "machship_search_locations",
+			"description": "Returns up to 10 Machship locations matching a suburb or postcode search string.\nUse this to look up valid delivery/pickup locationIds before creating consignments."
+		},
+		{
+			"name": "machship_get_locations_exact",
+			"description": "Returns locations that exactly match provided suburb/postcode combinations.\nSupports multiple location lookups in one call."
+		},
+		{
+			"name": "machship_get_locations_with_options",
+			"description": "Returns locations with additional search options/filters applied."
+		},
+		{
+			"name": "machship_get_manifests",
+			"description": "Returns a paginated list of manifests for a company (max 200 per call).\nA manifest represents a carrier pickup booking for a group of consignments."
+		},
+		{
+			"name": "machship_group_all_for_manifest",
+			"description": "Groups ALL unmanifested consignments for a company into manifest groups (preview before manifesting)."
+		},
+		{
+			"name": "machship_group_consignments_for_manifest",
+			"description": "Groups a specific set of consignments into manifest groups (preview before manifesting)."
+		},
+		{
+			"name": "machship_manifest_consignments",
+			"description": "Books/manifests consignments with the carrier — creates the pickup booking and generates tracking numbers.\nThis is the final step in the consignment workflow before physical pickup."
+		},
+		{
+			"name": "machship_rebook_manifest_pickup",
+			"description": "Rebooks the carrier pickup for an existing manifest (e.g. missed pickup or changed schedule)."
+		},
+		{
+			"name": "machship_get_consignment_notes",
+			"description": "Returns all notes attached to a consignment (internal comments, delivery instructions, etc.)."
+		},
+		{
+			"name": "machship_get_organisation_links",
+			"description": "Returns all links (partnerships/integrations) that exist for an organisation."
+		},
+		{
+			"name": "machship_get_linked_from_organisations",
+			"description": "Returns all organisations that have linked INTO this organisation (suppliers, partners)."
+		},
+		{
+			"name": "machship_get_linked_to_organisations",
+			"description": "Returns all organisations this organisation has linked TO (customers, subsidiaries)."
+		},
+		{
+			"name": "machship_get_organisation_public_key",
+			"description": "Returns the public key for an organisation, used to set up inter-organisation links."
+		},
+		{
+			"name": "machship_get_organisation_by_public_key",
+			"description": "Validates a public key and returns the corresponding organisation details.\nUse this to verify a partner's public key before linking."
+		},
+		{
+			"name": "machship_add_organisation_link",
+			"description": "Links another organisation into yours using their public key."
+		},
+		{
+			"name": "machship_remove_organisation_link",
+			"description": "Removes an existing link between two organisations. This action is irreversible."
+		},
+		{
+			"name": "machship_reset_organisation_public_key",
+			"description": "Resets the public key for an organisation (generates new key). Does NOT affect existing links."
+		},
+		{
+			"name": "machship_create_pending_consignment",
+			"description": "Creates a pending consignment — a draft/staging consignment that hasn't been rated or assigned to a carrier yet.\nPending consignments can be converted to full consignments after quoting."
+		},
+		{
+			"name": "machship_get_pending_consignment",
+			"description": "Returns details for a single pending consignment by ID."
+		},
+		{
+			"name": "machship_get_pending_consignments_by_ids",
+			"description": "Returns details for multiple pending consignments by IDs (max 10 per request)."
+		},
+		{
+			"name": "machship_get_pending_consignments_by_reference1",
+			"description": "Finds pending consignments by Reference 1 field. Max 10 per request."
+		},
+		{
+			"name": "machship_get_pending_consignments_by_reference2",
+			"description": "Finds pending consignments by Reference 2 field. Max 10 per request."
+		},
+		{
+			"name": "machship_get_recent_pending_consignments",
+			"description": "Returns pending consignments created or updated within a UTC date range. Useful for sync workflows."
+		},
+		{
+			"name": "machship_delete_pending_consignments",
+			"description": "Deletes one or more pending consignments."
+		},
+		{
+			"name": "machship_create_quote",
+			"description": "Creates a freight quote in Machship — returns available carrier rates for a shipment.\nUse this to compare carrier prices and transit times before creating a consignment."
+		},
+		{
+			"name": "machship_create_quote_complex_items",
+			"description": "Creates a freight quote using complex item definitions (detailed packaging, dangerous goods, serialisation data)."
+		},
+		{
+			"name": "machship_get_quotes",
+			"description": "Returns all quotes for a given company."
+		},
+		{
+			"name": "machship_get_quote",
+			"description": "Returns full details for a single quote by ID, including all carrier rate options."
+		},
+		{
+			"name": "machship_get_routes",
+			"description": "Returns a list of available freight routes and carrier services for a single shipment request.\nUse this to find all carrier options (rates, ETAs) before creating a consignment."
+		},
+		{
+			"name": "machship_get_routes_batch",
+			"description": "Returns available routes for multiple shipment requests in a single call.\nEfficient for bulk rate shopping across multiple shipments."
+		},
+		{
+			"name": "machship_get_routes_complex_items",
+			"description": "Returns available routes for a shipment with complex item definitions (dangerous goods, specialised packaging)."
+		}
+	]
 }
