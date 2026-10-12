@@ -4,6 +4,8 @@ dist/
 .env*
 *.log
 npm-debug.log*
+# Yarn is the only package manager; yarn.lock is the lockfile
+package-lock.json
 yarn-debug.log*
 yarn-error.log*
 *.bak
