@@ -8,7 +8,7 @@ Operational guide and reference for AI agents maintaining, extending, or consumi
 
 ### Identity & Runtime
 - **Package:** `@devkind/machship-mcp` (runtime Node.js >= 22, ESM, TypeScript target `ES2022`). Development needs Node.js 22.14+ or 24.10+: semantic-release 25 declares that engine range and Yarn 1 enforces it on `yarn install`.
-- **MCP Framework:** High-level `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` (SDK `^1.6.1`).
+- **MCP Framework:** High-level `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` (SDK `^1.32.1`).
 - **Catalog Tool Count:** 125 tools across 21 domain modules in `src/tools/`.
 - **Server Name & Version:** `machship-mcp` / `1.0.0` defined in `src/utils/constants.ts`.
 
