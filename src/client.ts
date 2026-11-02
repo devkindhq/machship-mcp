@@ -21,7 +21,11 @@ type McpToolResult = {
  */
 export const resultSchema = z
 	.object({
-		object: z.unknown().describe('Response payload from the Machship API'),
+		// zod 4 marks z.unknown() keys required; a record payload can lack "object".
+		object: z
+			.unknown()
+			.optional()
+			.describe('Response payload from the Machship API'),
 		errors: z
 			.array(z.unknown())
 			.nullish()

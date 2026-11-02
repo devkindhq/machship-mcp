@@ -33,7 +33,7 @@ Example:
 			inputSchema: z
 				.object({
 					request: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Route request (companyId, from/to location, items with weight/dimensions, optional despatchDate)',
 						),
@@ -72,7 +72,7 @@ Args:
 			inputSchema: z
 				.object({
 					requests: z
-						.array(z.record(z.unknown()))
+						.array(z.record(z.string(), z.unknown()))
 						.min(1)
 						.describe('Array of route requests'),
 				})
@@ -109,7 +109,7 @@ Args:
 			inputSchema: z
 				.object({
 					request: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Route request with complexItems (dangerous goods, specialised packaging)',
 						),

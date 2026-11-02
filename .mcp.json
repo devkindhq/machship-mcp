@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "machship": {
+      "command": "npx",
+      "args": ["-y", "@devkind/machship-mcp@1.3.0"],
+      "env": {
+        "MACHSHIP_API_TOKEN": "${user_config.machship_api_token}",
+        "MACHSHIP_API_URL": "${user_config.machship_api_url}"
+      }
+    }
+  }
+}

@@ -1,77 +1,32 @@
-# Machship MCP Server
+# Machship MCP Server: freight quotes, bookings and labels for AI agents
 
-A Model Context Protocol server that integrates AI assistants with the [Machship](https://machship.com) freight management platform. Built on a production-ready TypeScript foundation, it provides comprehensive access to Machship for consignment management, quoting, labelling, manifesting, and more — through any MCP-compatible AI client.
+[![npm](https://img.shields.io/npm/v/%40devkind%2Fmachship-mcp)](https://www.npmjs.com/package/@devkind/machship-mcp)
+[![Release](https://github.com/devkindhq/machship-mcp/actions/workflows/ci-semantic-release.yml/badge.svg)](https://github.com/devkindhq/machship-mcp/actions/workflows/ci-semantic-release.yml)
+[![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
 
-**Built by [Devkind](https://devkind.com.au)** — cutting-edge software development serving businesses globally.
+Machship MCP server connects Claude Desktop, Claude Code, Cursor, VS Code and any other MCP client to the [Machship](https://machship.com) freight platform API. It has 125 tools for live rates, quotes, consignments, labels, manifests, tracking and invoices. It runs with `npx` over stdio, or as an HTTP endpoint.
 
-[![NPM Version](https://img.shields.io/npm/v/%40devkind%2Fmachship-mcp)](https://www.npmjs.com/package/@devkind/machship-mcp)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-[![Built by Devkind](https://img.shields.io/badge/Built%20by-Devkind-blue)](https://devkind.com.au)
-[![smithery badge](https://smithery.ai/badge/devkind/machship-mcp)](https://smithery.ai/servers/devkind/machship-mcp)
+## Quickstart
 
-## Features
+You need Node.js 22 or later and a Machship API token. In Machship, go to **Settings > API** and generate a token.
 
-- **Full Machship API Coverage**: 125 tools across 21 modules — consignments, quotes, labels, manifests, carriers, locations, and more
-- **Dual Transport Support**: STDIO and HTTP transports for AI assistant and web integration
-- **Type Safety**: Full TypeScript implementation with Zod schema validation
-- **npx Ready**: Zero-install usage via `npx @devkind/machship-mcp`
-- **Docker Support**: Production Docker image on Docker Hub
-- **Any MCP Client**: Works with Claude Desktop, Cursor, VS Code, Windsurf, and more
+```bash
+# Read the token without echo, so it stays out of shell history
+read -rs MACHSHIP_API_TOKEN
+claude mcp add --scope local machship -e MACHSHIP_API_TOKEN="$MACHSHIP_API_TOKEN" -- npx -y @devkind/machship-mcp
+```
 
-## Available Tools
+Then ask your agent: *"Ping the Machship API"*. A successful reply confirms the token.
 
-| Module | Tools |
-|---|---|
-| Authenticate | ping |
-| Attachments | get, POD report, batch download, upload |
-| CarrierInvoices | list, entries, reprice, auto-reconcile |
-| CommercialInvoices | upload |
-| Companies | list, carriers/accounts/services |
-| CompanyItems | get, list, by-sku, complex variants, create, delete |
-| CompanyLocations | get, list, create, edit, permanent pickups |
-| Consignments | get, batch, by-reference, create, edit, delete, search, statuses |
-| Consolidation | group, perform, group+perform |
-| CustomSchemas | get all, get by id, create, update, delete |
-| FinancialInvoice | list posted, get by document number |
-| Identities | create, get, list, update, delete, enable/disable, link to companies, public keys |
-| IdentityProviders | get by id, list by company/user/organisation |
-| Labels | consignment PDF, item PDF, manifest PDF, batch zip, print, dangerous goods |
-| Locations | search, exact match, with options |
-| Manifests | list, group, manifest/book, rebook pickup |
-| Notes | get consignment notes |
-| OrganisationLinks | get links, add, remove, public key management |
-| PendingConsignments | create, get, batch, by-reference, recent, delete |
-| Quotes | create, create with complex items, list, get |
-| Routes | get routes, batch routes, complex items routes |
+### Install in your client
 
-**Total: 125 tools**
+Requirements:
 
-## Quick Start (No Install Required)
+- Node.js 22 or later
+- A Machship API token
+- Claude Desktop, Claude Code, Cursor, VS Code, Windsurf, Goose, LM Studio, Warp, or another MCP client
 
-> No cloning, no global installs — just Node.js 18+ and a Machship API token.
-
-**Step 1 — Get your Machship API token**
-
-1. Log into your Machship account
-2. Go to **Settings → API**
-3. Generate an API token — this is your `MACHSHIP_API_TOKEN`
-
-**Step 2 — Add to your MCP client** (pick one below)
-
-**Step 3 — Restart your client and start chatting**
-
-> To verify it works, ask: _"Ping the Machship API"_ — you should get a successful response.
-
----
-
-## Client Setup
-
-### Claude Desktop
-
-Open **Settings → Developer → Edit Config**, or edit the file directly (create it if it doesn't exist):
-
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+**Standard config** works in most MCP clients:
 
 ```json
 {
@@ -87,261 +42,224 @@ Open **Settings → Developer → Edit Config**, or edit the file directly (crea
 }
 ```
 
-Restart Claude Desktop — the Machship tools will appear automatically.
+Keep the token in your user-level client config. Do not put it in a project `.mcp.json` that you commit.
 
-### Claude Code (CLI)
+<details>
+<summary>Claude Desktop</summary>
 
-```bash
-# Prompts for the token without echoing it or saving it to shell history
-read -rs MACHSHIP_API_TOKEN
-claude mcp add --scope local machship -e MACHSHIP_API_TOKEN="$MACHSHIP_API_TOKEN" -- npx -y @devkind/machship-mcp
-```
+Open **Settings > Developer > Edit Config**, or edit the file directly:
 
-`--scope local` stores the token in your user config (`~/.claude.json`), outside the repository. Never put the token in a project `.mcp.json` — that file is meant to be committed.
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add the standard config above and restart Claude Desktop.
+
+</details>
+
+<details>
+<summary>Claude Code</summary>
+
+Use the Quickstart command above. `--scope local` stores the token in `~/.claude.json`, outside the repository. You can also install the [Claude Code plugin](#claude-code-plugin).
+
+</details>
 
 <details>
 <summary>Cursor</summary>
 
-#### One-click install:
-
 [<img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor">](https://cursor.com/en/install-mcp?name=Machship%20MCP&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBkZXZraW5kL21hY2hzaGlwLW1jcCJdLCJlbnYiOnsiTUFDSFNISVBfQVBJX1RPS0VOIjoieW91ci10b2tlbi1oZXJlIn19)
 
-#### Manual setup:
-
-Go to `Cursor Settings` → `MCP` → `Add new MCP Server`:
-- **Name:** Machship MCP
-- **Type:** command
-- **Command:** `npx -y @devkind/machship-mcp`
-- **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
+Or go to `Cursor Settings` > `MCP` > `Add new MCP Server`. Use type `command`, the command `npx -y @devkind/machship-mcp`, and set `MACHSHIP_API_TOKEN`.
 
 </details>
 
 <details>
 <summary>VS Code</summary>
 
-Install via the VS Code CLI (one command):
-
 ```bash
 code --add-mcp '{"name":"machship","command":"npx","args":["-y","@devkind/machship-mcp"],"env":{"MACHSHIP_API_TOKEN":"your-token-here"}}'
 ```
 
-Or follow the MCP [setup guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) and use this config:
-
-```json
-{
-  "mcpServers": {
-    "machship": {
-      "command": "npx",
-      "args": ["-y", "@devkind/machship-mcp"],
-      "env": {
-        "MACHSHIP_API_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
+Or follow the VS Code MCP [setup guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) with the standard config above.
 
 </details>
 
 <details>
 <summary>Windsurf</summary>
 
-Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/cascade/mcp) and add to your MCP configuration file:
-
-```json
-{
-  "mcpServers": {
-    "machship": {
-      "command": "npx",
-      "args": ["-y", "@devkind/machship-mcp"],
-      "env": {
-        "MACHSHIP_API_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
+Follow the Windsurf MCP [documentation](https://docs.windsurf.com/windsurf/cascade/mcp) and add the standard config above.
 
 </details>
 
 <details>
 <summary>Goose</summary>
 
-Go to `Advanced settings` → `Extensions` → `Add custom extension`:
-- **Name:** Machship MCP
-- **Type:** STDIO
-- **Command:** `npx -y @devkind/machship-mcp`
-- **Environment variable:** `MACHSHIP_API_TOKEN` = `your-token-here`
+Go to `Advanced settings` > `Extensions` > `Add custom extension`. Use type `STDIO`, the command `npx -y @devkind/machship-mcp`, and set `MACHSHIP_API_TOKEN`.
 
 </details>
 
 <details>
 <summary>LM Studio</summary>
 
-Go to `Program` in the right sidebar → `Install` → `Edit mcp.json` and add:
-
-```json
-{
-  "mcpServers": {
-    "machship": {
-      "command": "npx",
-      "args": ["-y", "@devkind/machship-mcp"],
-      "env": {
-        "MACHSHIP_API_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
+Go to `Program` in the right sidebar > `Install` > `Edit mcp.json` and add the standard config above.
 
 </details>
 
 <details>
 <summary>Warp</summary>
 
-Go to `Settings` → `AI` → `Manage MCP Servers` → `+ Add`, or use the slash command `/add-mcp` in the Warp prompt:
-
-```json
-{
-  "mcpServers": {
-    "machship": {
-      "command": "npx",
-      "args": ["-y", "@devkind/machship-mcp"],
-      "env": {
-        "MACHSHIP_API_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
+Go to `Settings` > `AI` > `Manage MCP Servers` > `+ Add`, or type `/add-mcp` in the Warp prompt. Paste the standard config above.
 
 </details>
 
-### Run directly (test / CLI use)
+<details>
+<summary>Docker</summary>
+
+No image is published to a registry. Build the image from this repo:
 
 ```bash
-# STDIO mode — pipe JSON-RPC directly
-MACHSHIP_API_TOKEN=your-token npx -y @devkind/machship-mcp
-
-# HTTP mode — exposes a local MCP endpoint
-MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y @devkind/machship-mcp
-# MCP endpoint: http://localhost:3000/mcp
-# Health check:  http://localhost:3000/health
+docker build -t devkind/machship-mcp .
 ```
 
-## Environment Variables
-
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `MACHSHIP_API_TOKEN` | Yes | — | Machship API token (sent in the `token` header) |
-| `MACHSHIP_API_URL` | No | `https://live.machship.com` | Override API base URL |
-| `TRANSPORT` | No | `stdio` | `stdio` or `http` |
-| `PORT` | No | `3000` | HTTP port (when `TRANSPORT=http`) |
-
-## Example Interactions
-
-Once connected, ask your AI assistant:
-
-```
-"Search for freight routes from Melbourne 3000 to Sydney 2000 for a 10kg parcel"
-"Create a consignment for company 123 shipping to Brisbane"
-"Get all unmanifested consignments for company 456"
-"What carriers and services are available for company 789?"
-"Get the label PDF for consignment 12345"
-"Show me completed consignments from last week"
-"Create a quote with complex items for express delivery"
-```
-
-## Transport Modes
-
-| Mode | When to use |
-|------|-------------|
-| `stdio` (default) | AI desktop clients (Claude Desktop, Cursor, VS Code, etc.) — JSON-RPC over stdin/stdout |
-| `http` | Web integrations, remote servers, or anything that needs an HTTP MCP endpoint |
-
-Set the mode via the `TRANSPORT` environment variable (see [Environment Variables](#environment-variables) above).
-
-## Docker
-
-Pull and run from Docker Hub — no Node.js required:
-
-```bash
-docker run -e MACHSHIP_API_TOKEN=your-token \
-           -e TRANSPORT=http \
-           -p 3000:3000 \
-           devkind/machship-mcp:latest
-```
-
-For stdio mode in MCP clients:
+Stdio config for an MCP client:
 
 ```json
 {
   "mcpServers": {
     "machship": {
       "command": "docker",
-      "args": ["run", "--rm", "-i",
-               "-e", "MACHSHIP_API_TOKEN=your-token-here",
-               "devkind/machship-mcp:latest"]
+      "args": ["run", "--rm", "-i", "-e", "MACHSHIP_API_TOKEN", "devkind/machship-mcp"],
+      "env": { "MACHSHIP_API_TOKEN": "your-token-here" }
     }
   }
 }
 ```
 
-## Development
-
-### Quick Start
-
-This repository uses Yarn 1 only (`yarn.lock`). Do not run `npm install`.
-
-Development needs Node.js 22.14+ or 24.10+ (required by the release tooling). Running the published server needs only Node.js 18+.
+HTTP mode on port 3000. The image sets `MCP_HOST=0.0.0.0`, so the published port accepts outside connections:
 
 ```bash
-# Clone and install
+docker run --rm -e MACHSHIP_API_TOKEN -e TRANSPORT=http -p 3000:3000 devkind/machship-mcp
+```
+
+</details>
+
+The server is also listed on [Smithery](https://smithery.ai/servers/devkind/machship-mcp).
+
+## Tools
+
+The server has 125 tools in 21 modules. Every tool name starts with `machship_`.
+
+| Area | Modules | Tools |
+| --- | --- | --- |
+| Consignments | Consignments, PendingConsignments, Consolidation, Notes | 36 |
+| Labels and documents | Labels, Attachments, CommercialInvoices | 22 |
+| Accounts and access | Identities, IdentityProviders, OrganisationLinks, CustomSchemas | 28 |
+| Companies, items and locations | Companies, CompanyItems, CompanyLocations, Locations | 20 |
+| Rates | Quotes, Routes | 7 |
+| Invoices | CarrierInvoices, FinancialInvoice | 6 |
+| Manifests | Manifests | 5 |
+| Connection check | Authenticate (`machship_ping`) | 1 |
+
+A typical flow: `machship_get_companies` for the company ID, `machship_search_locations` for suburbs and postcodes, `machship_get_routes` for live rates, `machship_create_consignment` to book, a label tool, then `machship_manifest_consignments` to send the booking to the carrier. `machship_get_consignment_statuses` tracks it.
+
+Tool text output stops at 25,000 characters. The full response is in `structuredContent`.
+
+## Example
+
+```json
+{
+  "tool": "machship_get_routes",
+  "arguments": {
+    "request": {
+      "companyId": 1790,
+      "fromLocation": { "suburb": "Melbourne", "postcode": "3000", "state": "VIC", "country": "AU" },
+      "toLocation": { "suburb": "Sydney", "postcode": "2000", "state": "NSW", "country": "AU" },
+      "items": [{ "weight": 10, "length": 30, "width": 30, "height": 30, "name": "Parcel", "quantity": 1 }]
+    }
+  }
+}
+```
+
+Illustrative output:
+
+```json
+{
+  "object": {
+    "routes": [
+      {
+        "carrier": { "name": "Example Express" },
+        "carrierService": { "name": "Road Express" },
+        "consignmentTotal": { "totalSellPrice": 24.5 },
+        "despatchOptions": [{ "etaLocal": "2026-11-05T17:00:00" }]
+      }
+    ]
+  },
+  "errors": null
+}
+```
+
+## Configuration
+
+| Variable | Required | Default | Purpose |
+| --- | --- | --- | --- |
+| `MACHSHIP_API_TOKEN` | Yes | none | Machship API token, sent only to `MACHSHIP_API_URL`. The server starts without it, but every tool call fails until it is set. |
+| `MACHSHIP_API_URL` | No | `https://live.machship.com` | Machship API base URL. |
+| `TRANSPORT` | No | `stdio` | Set to `http` for the HTTP transport. |
+| `PORT` | No | `3000` | HTTP port when `TRANSPORT=http`. |
+| `MCP_HOST` | No | `127.0.0.1` | HTTP bind address when `TRANSPORT=http`. |
+
+## Claude Code plugin
+
+The repo root is a Claude Code plugin. It adds the Machship MCP server, pinned to a release version of `@devkind/machship-mcp` ([`.mcp.json`](.mcp.json)). When you enable the plugin, Claude Code asks for your API token and stores it as a sensitive value. You can also change the API URL.
+
+Install it from this repo's marketplace (Claude Code 2.1.275 or later):
+
+```bash
+/plugin install machship --marketplace devkindhq/machship-mcp
+```
+
+The plugin will also be in the Claude plugin directory once it is listed. On older Claude Code versions, use the `claude mcp add` command in the [Quickstart](#quickstart).
+
+## HTTP mode
+
+```bash
+MACHSHIP_API_TOKEN=your-token TRANSPORT=http npx -y @devkind/machship-mcp
+```
+
+- MCP endpoint: `POST http://localhost:3000/mcp` (Streamable HTTP, stateless, JSON responses)
+- Health check: `GET http://localhost:3000/health`
+
+By default the server listens on `127.0.0.1` only. It rejects requests whose `Host` header is not `localhost`, `127.0.0.1` or `::1`, which blocks DNS rebinding attacks from web pages. Set `MCP_HOST=0.0.0.0` to listen on all interfaces, for example in a container.
+
+> **Warning:** HTTP mode has no authentication, and every request uses the server's Machship token. If you set `MCP_HOST` to anything other than a loopback address, put an authenticating proxy in front of the server.
+
+## Security notes
+
+- HTTP mode has no authentication. See [HTTP mode](#http-mode) before you set `MCP_HOST`.
+- Tools can create, edit and delete live consignments, identities and organisation links. Tool annotations mark the delete and remove tools as destructive, so a client can ask you to confirm them. `machship_update_identity` sets omitted fields to null.
+- Use a token with the smallest Machship permissions that your work needs.
+
+## Development
+
+This repo uses Yarn 1 (`yarn.lock`). Do not use `npm install`.
+
+```bash
 git clone https://github.com/devkindhq/machship-mcp.git
 cd machship-mcp
 yarn install
-
-# Build
-yarn build
-
-# Run in STDIO mode
+yarn lint && yarn build
 MACHSHIP_API_TOKEN=your-token yarn start
-
-# Run in HTTP mode
-MACHSHIP_API_TOKEN=your-token TRANSPORT=http yarn start
-
-# Development with watch mode
-MACHSHIP_API_TOKEN=your-token yarn dev
 ```
 
-### Scripts
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the checks, commit style and release flow.
 
-```bash
-yarn build                  # Compile TypeScript to dist/
-yarn dev                    # Watch mode with tsx
-yarn start                  # Run compiled server
-yarn clean                  # Remove dist/
-yarn lint                   # ESLint + Prettier check on src/
-yarn format                 # Format src/ with Prettier
-yarn bundle                 # Build machship-mcp.mcpb (MCPB bundle for Smithery)
+## Built by
 
-# Docker
-yarn docker:build           # Build image as devkind/machship-mcp:latest
-yarn docker:build:version   # Tag with package version + latest
-yarn docker:run             # Run locally in HTTP mode on port 3000
-yarn docker:push            # Push latest to Docker Hub
-yarn docker:push:version    # Push version tag + latest to Docker Hub
-yarn docker:release         # Full pipeline: build + tag + push
-```
-
+Built by [Devkind](https://devkind.com.au). Maintained by the Devkind team.
 
 ## License
 
-[ISC License](https://opensource.org/licenses/ISC)
+[ISC](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
-## Resources
+## Automating freight for your store?
 
-- [MCP Specification](https://modelcontextprotocol.io/specification/2025-06-18)
-- [MCP SDK](https://github.com/modelcontextprotocol/sdk)
-- [Machship API Documentation](https://machship.com)
-- [Devkind](https://devkind.com.au) — the team behind this server
+If you ship with Machship, Devkind can connect it to the rest of your stack. We build on [Shopify](https://devkind.com.au/services/shopify), [Swell](https://devkind.com.au/services/swell) and [headless commerce](https://devkind.com.au/services/headless-ecommerce) stacks, and build custom MCP servers and AI agent workflows. [Talk to Devkind](https://devkind.com.au/services) or email [hello@devkind.com.au](mailto:hello@devkind.com.au).

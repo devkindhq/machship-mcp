@@ -7,8 +7,8 @@ Operational guide and reference for AI agents maintaining, extending, or consumi
 ## 1. Environment & Architecture
 
 ### Identity & Runtime
-- **Package:** `@devkind/machship-mcp` (runtime Node.js >= 18, ESM, TypeScript target `ES2022`). Development needs Node.js 22.14+ or 24.10+: semantic-release 25 declares that engine range and Yarn 1 enforces it on `yarn install`.
-- **MCP Framework:** High-level `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` (SDK `^1.6.1`).
+- **Package:** `@devkind/machship-mcp` (runtime Node.js >= 22, ESM, TypeScript target `ES2022`). Development needs Node.js 22.14+ or 24.10+: semantic-release 25 declares that engine range and Yarn 1 enforces it on `yarn install`.
+- **MCP Framework:** High-level `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` (SDK `^1.32.1`).
 - **Catalog Tool Count:** 125 tools across 21 domain modules in `src/tools/`.
 - **Server Name & Version:** `machship-mcp` / `1.0.0` defined in `src/utils/constants.ts`.
 
@@ -16,7 +16,8 @@ Operational guide and reference for AI agents maintaining, extending, or consumi
 Transport mode is chosen via `TRANSPORT`:
 - `TRANSPORT=stdio` (default): `StdioServerTransport`. Process lifetime tied to parent process stdin/stdout.
   - **Standard Stream Boundary:** All server logs, errors, and diagnostic messages write strictly to `stderr` (`console.error`). Standard out (`stdout`) is reserved exclusively for JSON-RPC messages.
-- `TRANSPORT=http`: Express app listening on `PORT` (default `3000`).
+- `TRANSPORT=http`: the SDK's `createMcpExpressApp({ host })` on `MCP_HOST` (default `127.0.0.1`) and `PORT` (default `3000`). For `127.0.0.1`, `localhost` or `::1` the SDK rejects other `Host` headers with 403 (DNS rebinding protection). Any other host disables that check; the SDK prints a warning only for `0.0.0.0` and `::`. The Dockerfile sets `MCP_HOST=0.0.0.0`.
+  - **Security:** no authentication. Every request uses the server's own token, so a non-local `MCP_HOST` needs an authenticating proxy.
   - Endpoint `POST /mcp`: Handled via `StreamableHTTPServerTransport` with `enableJsonResponse: true`. Instantiates a new `McpServer` and transport instance per connection.
   - Endpoint `GET /health`: Healthcheck responding with `{ "status": "ok", "server": "machship-mcp-server" }`.
 
@@ -27,6 +28,7 @@ Transport mode is chosen via `TRANSPORT`:
 | `MACHSHIP_API_URL` | `https://live.machship.com` | Base API URL. Target `https://sandbox-api.machship.com` for testing. *Never use `MACHSHIP_BASE_URL` (ignored).* |
 | `TRANSPORT` | `stdio` | `stdio` or `http`. |
 | `PORT` | `3000` | HTTP listening port when `TRANSPORT=http`. |
+| `MCP_HOST` | `127.0.0.1` | HTTP bind address when `TRANSPORT=http`. |
 
 ---
 
@@ -435,14 +437,14 @@ yarn dev
 ### Package Manager
 Yarn 1 only (`yarn.lock`, `"packageManager": "yarn@1.22.22"`). `package-lock.json` is gitignored; never run `npm install`. Use `yarn audit`, not `npm audit`.
 
-### Single Zod Copy (`resolutions`)
-`package.json` pins `"resolutions": { "zod": "3.25.76" }`. The MCP SDK accepts `zod ^3.25 || ^4.0`; without the pin, `yarn upgrade` installs a second zod 4 copy under the SDK and `tsc` runs out of memory. Remove the pin only when migrating the tools to zod 4.
+### Single Zod Copy
+The tools use zod 4, and the MCP SDK (`zod ^3.25 || ^4.0`) resolves to the same copy. Keep one runtime zod in `yarn.lock`: a second copy under the SDK makes `tsc` run out of memory. Only `@anthropic-ai/mcpb` (dev) keeps its own zod 3. zod 4 needs two arguments for records: write `z.record(z.string(), z.unknown())`.
 
 ### MCPB Bundle (Smithery)
 ```bash
 yarn bundle   # build + sync manifest tools + pack machship-mcp.mcpb
 ```
-- `scripts/sync-manifest-tools.js` starts `dist/index.js` without a token and writes `manifest.json` `tools` from `tools/list`. Commit the result whenever tools change.
+- `scripts/sync-manifest-tools.js` starts `dist/index.js` without a token and writes `manifest.json` `tools` from `tools/list`. Commit the result whenever tools change. `server.json` has no tool list: the MCP Registry rejects publisher metadata over 4 KB.
 - `scripts/build-mcpb.js` packs a staging copy with production dependencies only, then runs `mcpb validate` and `mcpb pack`.
 - Smithery reads listing data from the bundle `manifest.json`; `smithery.yaml` is not used.
 
@@ -460,6 +462,8 @@ node scripts/publish-smithery.js v1.2.3             # publish
 Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json` (both version fields), and `manifest.json`.
 
 Releases run on push to `main` (semantic-release): `feat:`/`fix:` commits trigger a version bump, `yarn bundle`, npm publish (public), a git tag, and a GitHub release with `machship-mcp.mcpb` attached. The GitHub release notes are the changelog.
+
+The Claude Code plugin files (`.claude-plugin/plugin.json` `version` and the `.mcp.json` package pin) are not in `update-version.js`. The plugin directory reads them from git, so set them to `X.Y.Z` in the pull request that releases `X.Y.Z`.
 
 The release never commits back to `main`: the org ruleset requires a pull request for every change to the default branch, with no bypass. CI writes the version into the version files before the build, so the published npm package, the bundle and the running server all carry the released version, while the files in the repo keep their last committed value. The git tags are the source of truth for versions.
 

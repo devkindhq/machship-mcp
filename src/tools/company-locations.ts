@@ -96,7 +96,7 @@ Args:
 			inputSchema: z
 				.object({
 					location: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Location data (companyId, name, address, suburb, postcode, state, country, contactName, phone)',
 						),
@@ -134,7 +134,7 @@ Args:
 			inputSchema: z
 				.object({
 					location: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Updated location data including id'),
 				})
 				.strict(),
@@ -208,7 +208,7 @@ Args:
 			inputSchema: z
 				.object({
 					payload: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Permanent pickup configuration including companyLocationId and schedule',
 						),

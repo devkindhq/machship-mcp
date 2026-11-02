@@ -18,6 +18,8 @@ FROM node:22-alpine AS production
 WORKDIR /app
 
 ENV NODE_ENV=production
+# Bind all interfaces so the published port accepts connections from outside the container.
+ENV MCP_HOST=0.0.0.0
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production && yarn cache clean

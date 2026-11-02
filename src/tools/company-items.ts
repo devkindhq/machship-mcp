@@ -277,7 +277,7 @@ Args:
 						.positive()
 						.describe('Company ID'),
 					item: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Complex item data (sku, description, weight, length, width, height, etc.)',
 						),

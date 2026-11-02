@@ -122,7 +122,7 @@ Args:
 			inputSchema: z
 				.object({
 					body: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Repricing request payload'),
 				})
 				.strict(),
@@ -158,7 +158,7 @@ Args:
 			inputSchema: z
 				.object({
 					body: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Reconciliation request payload'),
 				})
 				.strict(),

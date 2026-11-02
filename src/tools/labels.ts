@@ -301,7 +301,7 @@ Args:
 			inputSchema: z
 				.object({
 					requests: z
-						.array(z.record(z.unknown()))
+						.array(z.record(z.string(), z.unknown()))
 						.min(1)
 						.describe(
 							'Print requests (consignmentId, printerId, labelType)',
