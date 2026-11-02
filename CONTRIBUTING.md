@@ -51,8 +51,6 @@ Use [Conventional Commits](https://www.conventionalcommits.org/), for example `f
 - `chore:`, `ci:`, `docs:` and `refactor:` publish no release.
 - A `BREAKING CHANGE:` footer publishes a major release.
 
-Dependabot uses `fix:` for runtime dependencies, `chore:` for dev dependencies, and `ci:` for GitHub Actions.
-
 ## Releases
 
 Every push to `main` runs `.github/workflows/ci-semantic-release.yml`. The workflow:
