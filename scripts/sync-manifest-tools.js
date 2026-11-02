@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Writes the server's tool list into manifest.json (MCPB, e.g. Smithery) and
- * server.json (MCP Registry) so registries can show tools without starting
- * the server. Run after `yarn build`. Usage: node scripts/sync-manifest-tools.js
+ * Writes the server's tool list into manifest.json (MCPB, e.g. Smithery) so
+ * registries can show tools without starting the server. server.json gets no
+ * tool list: the MCP Registry caps publisher metadata at 4 KB.
+ * Run after `yarn build`. Usage: node scripts/sync-manifest-tools.js
  */
 
 import fs from 'fs';
@@ -15,7 +16,6 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const manifestPath = path.join(rootDir, 'manifest.json');
-const serverJsonPath = path.join(rootDir, 'server.json');
 
 const transport = new StdioClientTransport({
 	command: process.execPath,
@@ -35,11 +35,4 @@ manifest.tools = tools.map((tool) => ({
 }));
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '\t') + '\n');
 
-const serverJson = JSON.parse(fs.readFileSync(serverJsonPath, 'utf8'));
-serverJson._meta['io.modelcontextprotocol.registry/publisher-provided'].tools =
-	tools.map((tool) => tool.name);
-fs.writeFileSync(serverJsonPath, JSON.stringify(serverJson, null, '\t') + '\n');
-
-console.log(
-	`Wrote ${tools.length} tools to manifest.json and server.json`,
-);
+console.log(`Wrote ${tools.length} tools to manifest.json`);

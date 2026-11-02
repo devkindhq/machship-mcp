@@ -675,7 +675,7 @@ Args:
 			inputSchema: z
 				.object({
 					consignment: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Consignment data (companyId, from/to locations, items, carrier, service, references)',
 						),
@@ -713,7 +713,7 @@ Args:
 			inputSchema: z
 				.object({
 					consignment: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Consignment data with complexItems array'),
 				})
 				.strict(),
@@ -749,7 +749,7 @@ Args:
 			inputSchema: z
 				.object({
 					consignment: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Consignment data referencing existing item IDs',
 						),
@@ -787,7 +787,7 @@ Args:
 			inputSchema: z
 				.object({
 					consignment: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Updated consignment data including id'),
 				})
 				.strict(),
@@ -975,7 +975,7 @@ Args:
 			inputSchema: z
 				.object({
 					updates: z
-						.array(z.record(z.unknown()))
+						.array(z.record(z.string(), z.unknown()))
 						.min(1)
 						.describe(
 							'Despatch date updates (consignmentId, despatchDate, eta)',

@@ -231,7 +231,7 @@ Args:
 										'Enable email notifications for this identity',
 									),
 								userAndCompanyLinks: z
-									.array(z.record(z.unknown()))
+									.array(z.record(z.string(), z.unknown()))
 									.optional()
 									.describe('Company/role links'),
 							}),
@@ -465,7 +465,7 @@ Args:
 									.positive()
 									.describe('Company ID'),
 								roles: z
-									.array(z.record(z.unknown()))
+									.array(z.record(z.string(), z.unknown()))
 									.optional()
 									.describe('Roles to assign'),
 							}),

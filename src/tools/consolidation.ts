@@ -20,7 +20,7 @@ Args:
 			inputSchema: z
 				.object({
 					options: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Consolidation grouping options'),
 				})
 				.strict(),
@@ -57,7 +57,7 @@ Args:
 			inputSchema: z
 				.object({
 					request: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Consolidation request payload'),
 				})
 				.strict(),
@@ -93,7 +93,7 @@ Args:
 			inputSchema: z
 				.object({
 					options: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Consolidation options'),
 				})
 				.strict(),

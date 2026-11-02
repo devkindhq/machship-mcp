@@ -121,7 +121,7 @@ Args:
 				.object({
 					s: z.string().min(1).describe('Search string'),
 					options: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.optional()
 						.describe('Additional location search options'),
 				})

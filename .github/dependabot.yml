@@ -1,26 +1,28 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    versioning-strategy: auto
-    labels:
-      - "dependencies"
+      interval: weekly
+    # fix: runtime updates ship a patch release; dev-only updates do not release.
     commit-message:
-      prefix: "chore"
-      include: "scope"
-    allow:
-      - dependency-type: "direct"
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    groups:
+      runtime:
+        dependency-type: production
+        update-types: [minor, patch]
+      dev:
+        dependency-type: development
+        update-types: [minor, patch]
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      # Types must match the engines.node floor (22), not the newest Node.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "github-actions"
+      interval: weekly
+    commit-message:
+      prefix: ci

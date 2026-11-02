@@ -192,7 +192,7 @@ Args:
 			inputSchema: z
 				.object({
 					manifests: z
-						.array(z.record(z.unknown()))
+						.array(z.record(z.string(), z.unknown()))
 						.min(1)
 						.describe(
 							'Manifest booking objects (consignmentIds, carrierId, despatchDate, etc.)',
@@ -231,7 +231,7 @@ Args:
 			inputSchema: z
 				.object({
 					rebooking: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Rebooking details (manifestId, pickupDate, etc.)',
 						),

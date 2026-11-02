@@ -35,7 +35,7 @@ Examples:
 			inputSchema: z
 				.object({
 					quote: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Quote request body (companyId, fromAddress/fromLocationId, toAddress, items)',
 						),
@@ -79,7 +79,7 @@ Examples:
 			inputSchema: z
 				.object({
 					quote: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Quote request with complexItems array'),
 				})
 				.strict(),

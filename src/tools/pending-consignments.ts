@@ -21,7 +21,7 @@ Args:
 			inputSchema: z
 				.object({
 					consignment: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Pending consignment data (companyId, fromAddress, toAddress, items, reference1, reference2)',
 						),

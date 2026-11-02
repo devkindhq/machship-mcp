@@ -15,13 +15,14 @@
  *   MACHSHIP_API_URL    — (optional) Override API base URL, default: https://live.machship.com
  *   TRANSPORT           — (optional) "http" for streamable HTTP, default: stdio
  *   PORT                — (optional) HTTP port when TRANSPORT=http, default: 3000
+ *   MCP_HOST            — (optional) HTTP bind address when TRANSPORT=http, default: 127.0.0.1
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { VERSION, SERVER_NAME } from './utils/constants.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import express from 'express';
+import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 
 import { registerAuthenticateTools } from './tools/authenticate.js';
 import { registerAttachmentsTools } from './tools/attachments.js';
@@ -96,8 +97,9 @@ async function runStdio(): Promise<void> {
 }
 
 async function runHTTP(): Promise<void> {
-	const app = express();
-	app.use(express.json());
+	// Local only by default; the SDK then rejects other Host headers (DNS rebinding).
+	const host = process.env.MCP_HOST || '127.0.0.1';
+	const app = createMcpExpressApp({ host });
 
 	app.post('/mcp', async (req, res) => {
 		const server = createServer();
@@ -115,9 +117,14 @@ async function runHTTP(): Promise<void> {
 	});
 
 	const port = parseInt(process.env.PORT || '3000');
-	app.listen(port, () => {
+	// Express 5 passes listen errors (e.g. EADDRINUSE) to this callback.
+	app.listen(port, host, (err?: Error) => {
+		if (err) {
+			console.error('Server error:', err);
+			process.exit(1);
+		}
 		console.error(
-			`Machship MCP server running on http://localhost:${port}/mcp`,
+			`Machship MCP server running on http://${host}:${port}/mcp`,
 		);
 	});
 }

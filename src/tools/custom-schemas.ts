@@ -86,7 +86,7 @@ Args:
 					name: z.string().min(1).describe('Schema name'),
 					type: z.string().min(1).describe('Schema type/entity'),
 					schema: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('JSON schema definition'),
 				})
 				.strict(),
@@ -125,7 +125,7 @@ Args:
 				.object({
 					id: z.string().min(1).describe('DotNet class ID'),
 					schema: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Updated JSON schema definition'),
 				})
 				.strict(),

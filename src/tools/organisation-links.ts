@@ -246,7 +246,7 @@ Args:
 			inputSchema: z
 				.object({
 					request: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe(
 							'Link request (publicKey of partner organisation)',
 						),
@@ -284,7 +284,7 @@ Args:
 			inputSchema: z
 				.object({
 					request: z
-						.record(z.unknown())
+						.record(z.string(), z.unknown())
 						.describe('Unlink request (organisationLinkId)'),
 				})
 				.strict(),
