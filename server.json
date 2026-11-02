@@ -1,8 +1,9 @@
 {
 	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-	"name": "io.github.devkindhq/machship",
+	"name": "io.github.devkindhq/machship-mcp",
 	"title": "Machship MCP",
 	"description": "Model Context Protocol server for the Machship freight management platform",
+	"websiteUrl": "https://devkind.com.au/services",
 	"repository": {
 		"url": "https://github.com/devkindhq/machship-mcp",
 		"source": "github"
