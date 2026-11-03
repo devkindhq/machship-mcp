@@ -84,6 +84,39 @@ export async function apiPost<T>(
 	return response.data as T;
 }
 
+export type FileResult = {
+	fileBase64: string;
+	contentType: string;
+	sizeBytes: number;
+};
+
+/** For endpoints that return raw file bytes (PDF, zip) instead of JSON. */
+export async function apiFile(
+	method: 'GET' | 'POST',
+	path: string,
+	params?: Record<string, unknown>,
+	data?: unknown,
+): Promise<FileResult> {
+	const response = await axios({
+		method,
+		url: `${API_BASE_URL}${path}`,
+		params,
+		data,
+		headers: { ...getAuthHeaders(), Accept: '*/*' },
+		timeout: 30000,
+		// The default JSON mode decodes bytes as UTF-8 text and damages the file.
+		responseType: 'arraybuffer',
+	});
+	const bytes = Buffer.from(response.data as ArrayBuffer);
+	return {
+		fileBase64: bytes.toString('base64'),
+		contentType: String(
+			response.headers['content-type'] ?? 'application/octet-stream',
+		),
+		sizeBytes: bytes.length,
+	};
+}
+
 export async function apiDelete<T>(
 	path: string,
 	params?: Record<string, unknown>,
@@ -103,9 +136,17 @@ export function handleApiError(error: unknown): string {
 	if (error instanceof AxiosError) {
 		if (error.response) {
 			const status = error.response.status;
-			const detail = error.response.data
-				? JSON.stringify(error.response.data)
-				: error.message;
+			let body: unknown = error.response.data;
+			// A file request gets its error body as bytes too.
+			if (body instanceof ArrayBuffer || Buffer.isBuffer(body)) {
+				const text = Buffer.from(body as ArrayBuffer).toString('utf8');
+				try {
+					body = JSON.parse(text);
+				} catch {
+					body = text;
+				}
+			}
+			const detail = body ? JSON.stringify(body) : error.message;
 			switch (status) {
 				case 400:
 					return `Error 400: Bad request — ${detail}. Check parameter types and required fields.`;
@@ -157,6 +198,27 @@ export function successResponse(
 		structuredContent: isRecord
 			? (data as Record<string, unknown>)
 			: { object: data },
+	};
+}
+
+export function fileResponse(file: FileResult): McpToolResult {
+	const full = JSON.stringify(file, null, 2);
+	// Cut base64 decodes to a damaged file, so never truncate it.
+	const text =
+		full.length <= CHARACTER_LIMIT
+			? full
+			: JSON.stringify(
+					{
+						contentType: file.contentType,
+						sizeBytes: file.sizeBytes,
+						note: `fileBase64 is over the ${CHARACTER_LIMIT}-character text limit. Read it from structuredContent.fileBase64.`,
+					},
+					null,
+					2,
+				);
+	return {
+		content: [{ type: 'text' as const, text }],
+		structuredContent: file,
 	};
 }
 

@@ -29,7 +29,7 @@ The Machship MCP server has more tools than one job needs. A freight job uses a 
 | 7. Labels | `machship_get_consignment_pdf_file_info`, `machship_get_item_pdf_file_info` | `consignmentId` | label file |
 | 8. Preview manifest | `machship_group_consignments_for_manifest` | consignment IDs | manifest groups |
 | 9. Book | `machship_manifest_consignments` | `manifests` array (consignment IDs, carrier, despatch date) | pickup booking and tracking numbers |
-| 10. Manifest PDF | `machship_get_manifests` for the manifest ID, then `machship_get_manifest_pdf_file_info` | optional `companyId` and date filters, then manifest ID | manifest file |
+| 10. Manifest PDF | `machship_get_manifest_label_pdf_by_consignment`, or `machship_get_manifest_pdf_file_info` with a manifest ID from `machship_get_manifests` | `consignmentId`, or manifest ID | manifest file |
 | 11. Track | `machship_get_consignment_statuses` | `ids`, optional `sinceDateCreatedUtc` | status events |
 
 Variants:
@@ -90,8 +90,8 @@ After a timeout on a create or manifest call, look for the consignment (`machshi
 - List tools page with `startIndex` (from 1) and `retrieveSize` (default 40, max 200): `machship_get_all_consignments`, `machship_get_unmanifested_consignments`, `machship_get_active_consignments`, `machship_get_recent_consignments`, `machship_get_manifests`. The schema does not say if `startIndex` counts rows or pages. Check that page 2 does not repeat IDs from page 1.
 - Narrow with filters before paging: `fromDateTimeLocal` / `toDateTimeLocal`, `carrierId`. `machship_get_completed_consignments` returns at most 2000 results.
 - Batch limits: `machship_get_consignments_by_ids` 100, reference lookups 10, label and attachment zips 40.
-- For a label or manifest file, use the `*_file_info` tools. They return the file as base64 in `object.content`, with `fileName` and `contentType`.
-- The raw `*_pdf` and zip tools return damaged bytes in this server version. Do not use them.
+- The `*_file_info` tools return the file as base64 in `object.content`, with `fileName` and `contentType`.
+- The raw `*_pdf`, zip and attachment tools return `{ fileBase64, contentType, sizeBytes }`. A file over 25,000 characters is only in `structuredContent.fileBase64`.
 - Save the decoded file when the client can write files. Do not paste base64 into the chat.
 
 ## Errors
