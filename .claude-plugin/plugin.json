@@ -1,6 +1,6 @@
 {
   "name": "machship",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Machship freight API MCP server with 125 tools: quotes, routes, consignments, labels, manifests, tracking and invoices.",
   "author": { "name": "Devkind", "url": "https://devkind.com.au" },
   "license": "ISC",
