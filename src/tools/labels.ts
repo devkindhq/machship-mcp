@@ -1,9 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import {
+	apiFile,
 	apiGet,
 	apiPost,
 	errorResponse,
+	fileResponse,
 	resultSchema,
 	successResponse,
 } from '../client.js';
@@ -13,7 +15,8 @@ export function registerLabelsTools(server: McpServer): void {
 		'machship_get_consignment_label_pdf',
 		{
 			title: 'Get Consignment Label PDF',
-			description: `Returns the consignment label as a PDF (base64 or file bytes).
+			description: `Returns the consignment label PDF.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -36,11 +39,11 @@ Args:
 		},
 		async ({ consignmentId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getConsignmentPdf',
-					{ consignmentId },
+				return fileResponse(
+					await apiFile('GET', '/apiv2/labels/getConsignmentPdf', {
+						consignmentId,
+					}),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -52,6 +55,7 @@ Args:
 		{
 			title: 'Get Item Label PDF',
 			description: `Returns item/package labels for a consignment as a PDF.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID
@@ -79,11 +83,12 @@ Args:
 		},
 		async ({ consignmentId, printA4 }) => {
 			try {
-				const data = await apiGet<unknown>('/apiv2/labels/getItemPdf', {
-					consignmentId,
-					printA4,
-				});
-				return successResponse(data);
+				return fileResponse(
+					await apiFile('GET', '/apiv2/labels/getItemPdf', {
+						consignmentId,
+						printA4,
+					}),
+				);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -95,6 +100,7 @@ Args:
 		{
 			title: 'Get Item Labels ZIP (Batch)',
 			description: `Gets item labels as a zip file for up to 40 consignments.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentIds (number[]): Consignment IDs (max 40)
@@ -127,11 +133,13 @@ Args:
 		},
 		async ({ consignmentIds, printA4, singlePdf }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getItemPdfsForConsignments',
-					{ consignmentIds, printA4, singlePdf },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/labels/getItemPdfsForConsignments',
+						{ consignmentIds, printA4, singlePdf },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -143,6 +151,7 @@ Args:
 		{
 			title: 'Get Manifest Label PDF',
 			description: `Returns the manifest document as a PDF by manifest ID.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - manifestId (number): Manifest ID`,
@@ -165,11 +174,11 @@ Args:
 		},
 		async ({ manifestId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getManifestPdf',
-					{ manifestId },
+				return fileResponse(
+					await apiFile('GET', '/apiv2/labels/getManifestPdf', {
+						manifestId,
+					}),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -181,6 +190,7 @@ Args:
 		{
 			title: 'Get Manifest Label PDF by Consignment',
 			description: `Returns the manifest PDF for the manifest associated with a given consignment.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -203,11 +213,13 @@ Args:
 		},
 		async ({ consignmentId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getManifestPdfByConsignmentId',
-					{ consignmentId },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/labels/getManifestPdfByConsignmentId',
+						{ consignmentId },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -219,6 +231,7 @@ Args:
 		{
 			title: 'Get Commercial Invoice PDF',
 			description: `Returns the commercial invoice PDF for a consignment (used for international shipments).
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -241,11 +254,13 @@ Args:
 		},
 		async ({ consignmentId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getCommercialInvoicePdf',
-					{ consignmentId },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/labels/getCommercialInvoicePdf',
+						{ consignmentId },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -257,6 +272,7 @@ Args:
 		{
 			title: 'Get Dangerous Goods Document PDF',
 			description: `Returns the dangerous goods declaration document PDF for a consignment.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -279,11 +295,13 @@ Args:
 		},
 		async ({ consignmentId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getDangerousGoodsDocumentPdf',
-					{ consignmentId },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/labels/getDangerousGoodsDocumentPdf',
+						{ consignmentId },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -370,7 +388,7 @@ Args:
 		'machship_get_consignment_pdf_file_info',
 		{
 			title: 'Get Consignment PDF File Info',
-			description: `Returns file metadata (name, size, URL) for the consignment label PDF without downloading it.
+			description: `Returns the consignment label PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -408,7 +426,7 @@ Args:
 		'machship_get_item_pdf_file_info',
 		{
 			title: 'Get Item Label PDF File Info',
-			description: `Returns file metadata for the item/package label PDF without downloading it.
+			description: `Returns the item/package label PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType.
 
 Args:
   - consignmentId (number): Consignment ID
@@ -448,7 +466,7 @@ Args:
 		'machship_get_manifest_pdf_file_info',
 		{
 			title: 'Get Manifest PDF File Info',
-			description: `Returns file metadata for the manifest PDF without downloading it.
+			description: `Returns the manifest PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType.
 
 Args:
   - manifestId (number): Manifest ID`,
@@ -486,7 +504,7 @@ Args:
 		'machship_get_dangerous_goods_pdf_file_info',
 		{
 			title: 'Get Dangerous Goods Document PDF File Info',
-			description: `Returns file metadata for the dangerous goods declaration PDF without downloading it.
+			description: `Returns the dangerous goods declaration PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -525,6 +543,7 @@ Args:
 		{
 			title: 'Get MO41 Document PDF',
 			description: `Returns the MO41 document PDF for a consignment (used for specific carrier compliance documents).
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -547,11 +566,11 @@ Args:
 		},
 		async ({ consignmentId }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getMO41DocumentPdf',
-					{ consignmentId },
+				return fileResponse(
+					await apiFile('GET', '/apiv2/labels/getMO41DocumentPdf', {
+						consignmentId,
+					}),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -562,7 +581,7 @@ Args:
 		'machship_get_mo41_document_pdf_file_info',
 		{
 			title: 'Get MO41 Document PDF File Info',
-			description: `Returns file metadata for the MO41 document PDF without downloading it.
+			description: `Returns the MO41 document PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType.
 
 Args:
   - consignmentId (number): Consignment ID`,
@@ -601,6 +620,7 @@ Args:
 		{
 			title: 'Get Special Instructions PDF',
 			description: `Returns the special instructions document PDF for a consignment.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentId (number): Consignment ID
@@ -628,11 +648,13 @@ Args:
 		},
 		async ({ consignmentId, printA4 }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/labels/getSpecialInstructionsPdf',
-					{ consignmentId, printA4 },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/labels/getSpecialInstructionsPdf',
+						{ consignmentId, printA4 },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -644,6 +666,7 @@ Args:
 		{
 			title: 'Return Item PDFs for Consignments (POST)',
 			description: `Returns item labels as a zip for up to 40 consignments (POST variant — use this when passing a body payload is preferred over query string).
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - consignmentIds (number[]): Consignment IDs (max 40)
@@ -671,11 +694,14 @@ Args:
 		},
 		async ({ consignmentIds, printA4 }) => {
 			try {
-				const data = await apiPost<unknown>(
-					'/apiv2/labels/returnItemPdfsForConsignments',
-					{ consignmentIds, printA4 },
+				return fileResponse(
+					await apiFile(
+						'POST',
+						'/apiv2/labels/returnItemPdfsForConsignments',
+						undefined,
+						{ consignmentIds, printA4 },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}

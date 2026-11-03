@@ -211,6 +211,8 @@ Illustrative output:
 
 The repo root is a Claude Code plugin. It adds the Machship MCP server, pinned to a release version of `@devkind/machship-mcp` ([`.mcp.json`](.mcp.json)). When you enable the plugin, Claude Code asks for your API token and stores it as a sensitive value. You can also change the API URL.
 
+The plugin also ships the `machship-freight` skill. The skill teaches Claude the freight workflow with exact tool names: rates, consignment, labels, manifest and tracking. It also tells Claude to ask you before it books, manifests or deletes.
+
 Install it from this repo's marketplace (Claude Code 2.1.275 or later):
 
 ```bash

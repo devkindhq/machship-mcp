@@ -1,9 +1,10 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import {
-	apiGet,
+	apiFile,
 	apiPost,
 	errorResponse,
+	fileResponse,
 	resultSchema,
 	successResponse,
 } from '../client.js';
@@ -13,8 +14,8 @@ export function registerAttachmentsTools(server: McpServer): void {
 		'machship_get_attachment',
 		{
 			title: 'Get Attachment',
-			description: `Downloads raw attachment file bytes from Machship by attachment ID.
-Returns base64-encoded file content.
+			description: `Downloads the raw attachment file from Machship by attachment ID.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - id (number): Attachment ID`,
@@ -33,11 +34,11 @@ Args:
 		},
 		async ({ id }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/attachments/getAttachment',
-					{ id },
+				return fileResponse(
+					await apiFile('GET', '/apiv2/attachments/getAttachment', {
+						id,
+					}),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -49,6 +50,7 @@ Args:
 		{
 			title: 'Get Attachment POD Report',
 			description: `Downloads a Proof of Delivery (POD) report that includes attachment and consignment details.
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - id (number): Attachment ID`,
@@ -67,11 +69,13 @@ Args:
 		},
 		async ({ id }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/attachments/getAttachmentPodReport',
-					{ id },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/attachments/getAttachmentPodReport',
+						{ id },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}
@@ -83,6 +87,7 @@ Args:
 		{
 			title: 'Get Attachments by Consignment IDs',
 			description: `Downloads attachments for up to 40 consignments in bulk (returned as zip).
+Returns { fileBase64, contentType, sizeBytes }. contentType comes from the response header.
 
 Args:
   - ids (number[]): Array of consignment IDs (max 40)`,
@@ -105,11 +110,13 @@ Args:
 		},
 		async ({ ids }) => {
 			try {
-				const data = await apiGet<unknown>(
-					'/apiv2/attachments/getAttachmentsByConsignmentIds',
-					{ ids },
+				return fileResponse(
+					await apiFile(
+						'GET',
+						'/apiv2/attachments/getAttachmentsByConsignmentIds',
+						{ ids },
+					),
 				);
-				return successResponse(data);
 			} catch (e) {
 				return errorResponse(e);
 			}

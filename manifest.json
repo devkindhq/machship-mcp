@@ -59,15 +59,15 @@
 		},
 		{
 			"name": "machship_get_attachment",
-			"description": "Downloads raw attachment file bytes from Machship by attachment ID.\nReturns base64-encoded file content."
+			"description": "Downloads the raw attachment file from Machship by attachment ID.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_attachment_pod_report",
-			"description": "Downloads a Proof of Delivery (POD) report that includes attachment and consignment details."
+			"description": "Downloads a Proof of Delivery (POD) report that includes attachment and consignment details.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_attachments_by_consignment_ids",
-			"description": "Downloads attachments for up to 40 consignments in bulk (returned as zip)."
+			"description": "Downloads attachments for up to 40 consignments in bulk (returned as zip).\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_upload_attachments",
@@ -363,31 +363,31 @@
 		},
 		{
 			"name": "machship_get_consignment_label_pdf",
-			"description": "Returns the consignment label as a PDF (base64 or file bytes)."
+			"description": "Returns the consignment label PDF.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_item_label_pdf",
-			"description": "Returns item/package labels for a consignment as a PDF."
+			"description": "Returns item/package labels for a consignment as a PDF.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_item_labels_zip",
-			"description": "Gets item labels as a zip file for up to 40 consignments."
+			"description": "Gets item labels as a zip file for up to 40 consignments.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_manifest_label_pdf",
-			"description": "Returns the manifest document as a PDF by manifest ID."
+			"description": "Returns the manifest document as a PDF by manifest ID.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_manifest_label_pdf_by_consignment",
-			"description": "Returns the manifest PDF for the manifest associated with a given consignment."
+			"description": "Returns the manifest PDF for the manifest associated with a given consignment.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_commercial_invoice_pdf",
-			"description": "Returns the commercial invoice PDF for a consignment (used for international shipments)."
+			"description": "Returns the commercial invoice PDF for a consignment (used for international shipments).\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_dangerous_goods_pdf",
-			"description": "Returns the dangerous goods declaration document PDF for a consignment."
+			"description": "Returns the dangerous goods declaration document PDF for a consignment.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_send_labels_to_printer",
@@ -399,35 +399,35 @@
 		},
 		{
 			"name": "machship_get_consignment_pdf_file_info",
-			"description": "Returns file metadata (name, size, URL) for the consignment label PDF without downloading it."
+			"description": "Returns the consignment label PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType."
 		},
 		{
 			"name": "machship_get_item_pdf_file_info",
-			"description": "Returns file metadata for the item/package label PDF without downloading it."
+			"description": "Returns the item/package label PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType."
 		},
 		{
 			"name": "machship_get_manifest_pdf_file_info",
-			"description": "Returns file metadata for the manifest PDF without downloading it."
+			"description": "Returns the manifest PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType."
 		},
 		{
 			"name": "machship_get_dangerous_goods_pdf_file_info",
-			"description": "Returns file metadata for the dangerous goods declaration PDF without downloading it."
+			"description": "Returns the dangerous goods declaration PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType."
 		},
 		{
 			"name": "machship_get_mo41_document_pdf",
-			"description": "Returns the MO41 document PDF for a consignment (used for specific carrier compliance documents)."
+			"description": "Returns the MO41 document PDF for a consignment (used for specific carrier compliance documents).\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_get_mo41_document_pdf_file_info",
-			"description": "Returns file metadata for the MO41 document PDF without downloading it."
+			"description": "Returns the MO41 document PDF as JSON. object.content holds the file as base64, with object.fileName and object.contentType."
 		},
 		{
 			"name": "machship_get_special_instructions_pdf",
-			"description": "Returns the special instructions document PDF for a consignment."
+			"description": "Returns the special instructions document PDF for a consignment.\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_return_item_pdfs_for_consignments",
-			"description": "Returns item labels as a zip for up to 40 consignments (POST variant — use this when passing a body payload is preferred over query string)."
+			"description": "Returns item labels as a zip for up to 40 consignments (POST variant — use this when passing a body payload is preferred over query string).\nReturns { fileBase64, contentType, sizeBytes }. contentType comes from the response header."
 		},
 		{
 			"name": "machship_search_locations",

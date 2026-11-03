@@ -406,9 +406,9 @@ Be precise with payload shapes when creating or querying batches:
 `machship_get_items_by_skus` takes up to 100 SKUs. If a SKU does not exist, MachShip omits it from the returned array without an error. Callers must diff requested SKUs against returned items.
 
 ### 7. Binary Files & PDF Handling
-- `apiGet` decodes data using Axios default JSON/string parsing. Fetching binary endpoints (`get_consignment_label_pdf`, `get_item_labels_zip`) can cause UTF-8 string encoding corruption.
-- Always prefer the `*FileInfo` endpoints (`machship_get_item_pdf_file_info`, `machship_get_consignment_pdf_file_info`, `machship_get_manifest_pdf_file_info`), which safely wrap the PDF in a Base64 string within JSON.
-- Base64 strings in `content[0].text` will be truncated if they exceed 25,000 characters. Extract complete base64 payloads from `structuredContent`.
+- The raw label, document and attachment endpoints (`getConsignmentPdf`, `getItemPdfsForConsignments`, `getAttachment` and others) return file bytes, not JSON. Their tools call `apiFile` (`responseType: 'arraybuffer'`) and return `{ fileBase64, contentType, sizeBytes }` through `fileResponse`. Do not call these endpoints with `apiGet`: its JSON mode decodes the bytes as UTF-8 and damages the file.
+- `fileResponse` never truncates base64. When the result is over 25,000 characters, the text holds only `contentType` and `sizeBytes`, and the file is in `structuredContent.fileBase64`.
+- The `*FileInfo` endpoints return JSON: `object.content` is the file as base64, with `object.fileName` and `object.contentType`. These go through `successResponse`, so their text is truncated at 25,000 characters. Read `structuredContent`.
 
 ---
 
