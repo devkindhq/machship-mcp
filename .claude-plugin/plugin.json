@@ -1,5 +1,6 @@
 {
   "name": "machship",
+  "displayName": "Machship MCP",
   "version": "1.4.0",
   "description": "Machship freight API MCP server with 125 tools: quotes, routes, consignments, labels, manifests, tracking and invoices.",
   "author": { "name": "Devkind", "url": "https://devkind.com.au" },
@@ -7,6 +8,7 @@
   "homepage": "https://github.com/devkindhq/machship-mcp",
   "repository": "https://github.com/devkindhq/machship-mcp",
   "keywords": ["machship", "freight", "logistics", "shipping", "consignment", "mcp", "mcp-server"],
+  "icon": "./assets/icon.png",
   "userConfig": {
     "machship_api_token": {
       "type": "string",

@@ -207,6 +207,14 @@ Illustrative output:
 | `PORT` | No | `3000` | HTTP port when `TRANSPORT=http`. |
 | `MCP_HOST` | No | `127.0.0.1` | HTTP bind address when `TRANSPORT=http`. |
 
+## Network access and data
+
+- The plugin starts the server with `npx`, so npx downloads the pinned `@devkind/machship-mcp` package from the npm registry.
+- The server sends requests only to `MACHSHIP_API_URL` (default `https://live.machship.com`). Each request carries your API token and the tool arguments, such as addresses, items, consignment IDs and the invoice files you upload.
+- Labels and other documents come back in the tool result as base64. The server writes no files.
+- The server sends no telemetry and stores no data. It writes errors to stderr only.
+- In HTTP mode the server also accepts requests on `MCP_HOST` and `PORT`. See [HTTP mode](#http-mode).
+
 ## Claude Code plugin
 
 The repo root is a Claude Code plugin. It adds the Machship MCP server, pinned to a release version of `@devkind/machship-mcp` ([`.mcp.json`](.mcp.json)). When you enable the plugin, Claude Code asks for your API token and stores it as a sensitive value. You can also change the API URL.
