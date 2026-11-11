@@ -9,7 +9,7 @@
   "repository": "https://github.com/devkindhq/machship-mcp",
   "keywords": ["machship", "freight", "logistics", "shipping", "consignment", "mcp", "mcp-server"],
   "icon": "./assets/icon.png",
-  "privacyPolicyUrl": "https://devkind.com.au/privacy-policy",
+  "privacyPolicyUrl": "https://github.com/devkindhq/machship-mcp/blob/main/PRIVACY.md",
   "userConfig": {
     "machship_api_token": {
       "type": "string",
