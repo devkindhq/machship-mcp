@@ -142,8 +142,6 @@ docker run --rm -e MACHSHIP_API_TOKEN -e TRANSPORT=http -p 3000:3000 devkind/mac
 
 </details>
 
-The server is also listed on [Smithery](https://smithery.ai/servers/devkind/machship-mcp).
-
 ## Tools
 
 The server has 125 tools in 21 modules. Every tool name starts with `machship_`.

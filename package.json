@@ -75,7 +75,6 @@
 		"eslint": "^10.13.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-prettier": "^5.0.0",
-		"fflate": "^0.8.3",
 		"prettier": "^3.0.0",
 		"semantic-release": "^25.0.9",
 		"tsx": "^4.19.2",

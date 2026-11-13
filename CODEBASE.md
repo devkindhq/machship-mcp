@@ -24,7 +24,7 @@ Transport mode is chosen via `TRANSPORT`:
 ### Configuration Variables
 | Variable | Default | Purpose |
 | :--- | :--- | :--- |
-| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip API token, sent in the `token` header. Deferred verification allows metadata listing without a token. Optional in the MCPB `user_config` (Smithery "Optional config" check); `requireToken()` in `src/client.ts` returns a clear error on each call without it. |
+| `MACHSHIP_API_TOKEN` | *None (Required for tool calls)* | MachShip API token, sent in the `token` header. Deferred verification allows metadata listing without a token. Optional in the MCPB `user_config`; `requireToken()` in `src/client.ts` returns a clear error on each call without it. |
 | `MACHSHIP_API_URL` | `https://live.machship.com` | Base API URL. Target `https://sandbox-api.machship.com` for testing. *Never use `MACHSHIP_BASE_URL` (ignored).* |
 | `TRANSPORT` | `stdio` | `stdio` or `http`. |
 | `PORT` | `3000` | HTTP listening port when `TRANSPORT=http`. |
@@ -106,8 +106,8 @@ server.registerTool(
 4. **Boolean Naming:** Prefix booleans with verbs (`includeChildCompanies`, `printA4`, `returnPdfFileBytes`).
 5. **Arrays:** Use plural identifiers (`ids`, `references`, `files`, `skus`).
 6. **Annotations:** Set `readOnlyHint: true` on queries, `destructiveHint: true` on deletions.
-7. **Tool Naming stays snake_case:** Smithery's "Naming" check rewards dot notation (`machship.get_x`), but several clients only accept `[a-zA-Z0-9_-]` and a rename breaks existing connections. Keep the names; that check stays unmet on purpose.
-8. **Output Schema:** Always set `outputSchema: resultSchema` (from `src/client.ts`) and return through `successResponse` / `errorResponse`. The SDK validates every successful result against the output schema, so `successResponse` always returns an object: the Machship envelope `{ object, errors }` as-is, any other payload (arrays, file bytes) as `{ object }`. Smithery's quality score counts output schemas per tool.
+7. **Tool Naming stays snake_case:** Do not switch to dot notation (`machship.get_x`). Several clients only accept `[a-zA-Z0-9_-]`, and a rename breaks existing connections. Keep the names.
+8. **Output Schema:** Always set `outputSchema: resultSchema` (from `src/client.ts`) and return through `successResponse` / `errorResponse`. The SDK validates every successful result against the output schema, so `successResponse` always returns an object: the Machship envelope `{ object, errors }` as-is, any other payload (arrays, file bytes) as `{ object }`.
 
 ---
 
@@ -440,23 +440,12 @@ Yarn 1 only (`yarn.lock`, `"packageManager": "yarn@1.22.22"`). `package-lock.jso
 ### Single Zod Copy
 The tools use zod 4, and the MCP SDK (`zod ^3.25 || ^4.0`) resolves to the same copy. Keep one runtime zod in `yarn.lock`: a second copy under the SDK makes `tsc` run out of memory. Only `@anthropic-ai/mcpb` (dev) keeps its own zod 3. zod 4 needs two arguments for records: write `z.record(z.string(), z.unknown())`.
 
-### MCPB Bundle (Smithery)
+### MCPB Bundle
 ```bash
 yarn bundle   # build + sync manifest tools + pack machship-mcp.mcpb
 ```
 - `scripts/sync-manifest-tools.js` starts `dist/index.js` without a token and writes `manifest.json` `tools` from `tools/list`. Commit the result whenever tools change. `server.json` has no tool list: the MCP Registry rejects publisher metadata over 4 KB.
 - `scripts/build-mcpb.js` packs a staging copy with production dependencies only, then runs `mcpb validate` and `mcpb pack`.
-- Smithery reads listing data from the bundle `manifest.json`; `smithery.yaml` is not used.
-
-### Publishing to Smithery (manual, after each release)
-```bash
-node scripts/publish-smithery.js v1.2.3 --dry-run   # prepare and check only
-node scripts/publish-smithery.js v1.2.3             # publish
-```
-- Smithery copies `manifest.json` `tools` into its listing and needs full MCP tool definitions (`inputSchema`, `outputSchema`, `title`, `annotations`). The strict MCPB schema allows only `name` and `description`, so `mcpb validate` and `mcpb pack` reject a manifest with them.
-- The script therefore downloads the release bundle (`gh release download`), starts its server without a token, writes the full `tools/list` output into a copy of `manifest.json`, rebuilds the archive with only that file changed (`fflate`), checks the rebuilt bundle starts with the same tools, then runs `smithery mcp publish`. The GitHub release and npm package stay unchanged.
-- `--bundle <file.mcpb>` publishes a local build instead of a release (no tag check). Use only when a release is not possible: Smithery then runs code that npm does not have.
-- Needs `gh` and `smithery` logged in on the machine that runs it. It is not run in CI: Smithery has no OIDC, and a stored Smithery API key could publish to the `devkind` namespace.
 
 ### Version Bumping & Releases
 Run `node scripts/update-version.js <new-version>` to synchronize versions simultaneously across `package.json`, `src/utils/constants.ts`, `server.json` (both version fields), and `manifest.json`.

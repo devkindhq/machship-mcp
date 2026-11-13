@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Writes the server's tool list into manifest.json (MCPB, e.g. Smithery) so
+ * Writes the server's tool list into manifest.json (MCPB) so
  * registries can show tools without starting the server. server.json gets no
  * tool list: the MCP Registry caps publisher metadata at 4 KB.
  * Run after `yarn build`. Usage: node scripts/sync-manifest-tools.js
