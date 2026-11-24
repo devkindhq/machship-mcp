@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Builds the MCPB bundle (machship-mcp.mcpb) published to Smithery.
+ * Builds the MCPB bundle (machship-mcp.mcpb) attached to each GitHub release.
  * Packs a staging copy with production dependencies only, so dev tooling
  * never ships. Run `yarn build` first. Usage: node scripts/build-mcpb.js
  */
