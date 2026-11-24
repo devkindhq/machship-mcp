@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/%40devkind%2Fmachship-mcp)](https://www.npmjs.com/package/@devkind/machship-mcp)
 [![Release](https://github.com/devkindhq/machship-mcp/actions/workflows/ci-semantic-release.yml/badge.svg)](https://github.com/devkindhq/machship-mcp/actions/workflows/ci-semantic-release.yml)
 [![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
+[![devkindhq/machship-mcp MCP server](https://glama.ai/mcp/servers/devkindhq/machship-mcp/badges/score.svg)](https://glama.ai/mcp/servers/devkindhq/machship-mcp)
 
 Machship MCP server connects Claude Desktop, Claude Code, Cursor, VS Code and any other MCP client to the [Machship](https://machship.com) freight platform API. It has 125 tools for live rates, quotes, consignments, labels, manifests, tracking and invoices. It runs with `npx` over stdio, or as an HTTP endpoint.
 
